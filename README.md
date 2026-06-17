@@ -3,7 +3,6 @@
 ![Executive Overview](images/executive_overview.png)
 
 ## Project Overview
-
 The Revenue Intelligence Platform is an end-to-end Business Intelligence solution designed to simulate a realistic enterprise environment for a global B2B technology and medical products company.
 
 The project combines data engineering, SQL-based data warehousing, financial analytics, and executive reporting to provide a comprehensive view of business performance across revenue, profitability, forecasting, products, and customers.
@@ -11,7 +10,6 @@ The project combines data engineering, SQL-based data warehousing, financial ana
 Built using Python, SQL Server, and Power BI, the solution demonstrates how modern organizations can transform transactional data into actionable business insights that support executive decision-making.
 
 ## Business Objectives
-
 The platform is designed to answer key business questions such as:
 
 - How is overall revenue performing?
@@ -23,7 +21,6 @@ The platform is designed to answer key business questions such as:
 - What actions should management prioritize?
 
 ## Key Capabilities
-
 ### Executive Performance Management
 - Executive KPI Reporting
 - Revenue Intelligence
@@ -52,7 +49,6 @@ The platform is designed to answer key business questions such as:
 - DAX Calculations
 
 ## Business Context
-
 The synthetic dataset simulates a global B2B company operating across:
 
 - Multiple countries and regions
@@ -79,7 +75,6 @@ The generated data includes realistic business dynamics such as:
 |--------------------------------|------------------------------------------|
 | Python                         | Synthetic data generation                |
 | Pandas & NumPy                 | Data simulation and transformation       |
-| SQL Server Developer Edition   | Enterprise data warehouse                |
 | SQL Server Management Studio   | Database development                     |
 | SQL                            | Data modeling and transformation         |
 | Power BI                       | Analytics and dashboarding               |
@@ -89,11 +84,10 @@ The generated data includes realistic business dynamics such as:
 
 ## Project Architecture
 
-project/
+```text
+revenue-intelligence/
 │
 ├── data/
-│   ├── raw/
-│   └── processed/
 │
 ├── notebooks/
 │   └── generate_dataset.ipynb
@@ -107,16 +101,21 @@ project/
 │   └── Revenue_Intelligence_Dashboard.pbix
 │
 ├── images/
-│   └── dashboard_preview.png
+│   └── executive_overview.png
+│   └── revenue_analysis.png
+│   └── margin_analysis.png
+│   └── forecasting_analysis.png
+│   └── customer_analytics.png
 │
 ├── requirements.txt
 ├── README.md
 └── .gitignore
+```
 
 ## Data Warehouse Design
-
 The project follows a layered enterprise data warehouse architecture.
 
+```text
 Python
  ↓
 SQL Server
@@ -125,6 +124,7 @@ SQL Server
 Power BI Semantic Model
  ↓
 Executive Dashboards
+```
 
 ### Schemas
 
@@ -161,7 +161,6 @@ The solution follows a star-schema architecture optimized for analytical workloa
 | dimSalesRep   | Sales representative information      |
 
 ### Dataset Characteristics
-
 The dataset contains:
 
 - 120.000 sales transactions
@@ -174,7 +173,6 @@ The dataset contains:
 - Outliers
 - Customer churn behavior
 - Enterprise and SMB customer dynamics
-
 
 ## Power BI Dashboard Suite
 
@@ -198,7 +196,6 @@ Provides a high-level summary of business performance and serves as the executiv
 - Forecast Reliability
 
 ### 2. Revenue Analysis
-
 Analyzes revenue performance and identifies growth drivers.
 
 #### Focus Areas
@@ -216,7 +213,6 @@ Analyzes revenue performance and identifies growth drivers.
 - Product Portfolio Analysis
 
 ### 3. Gross Margin Analysis
-
 Evaluates profitability and pricing effectiveness.
 
 #### Focus Areas
@@ -233,7 +229,6 @@ Evaluates profitability and pricing effectiveness.
 - Margin Risk Detection
 
 ### 4. Forecasting Analysis
-
 Measures forecast quality and planning effectiveness.
 
 #### Focus Areas
@@ -249,7 +244,6 @@ Measures forecast quality and planning effectiveness.
 - Forecast Driver Analysis
 
 ### 5. Customer Analytics
-
 Provides insights into customer health, retention, and growth.
 
 #### Focus Areas
@@ -284,15 +278,16 @@ Provides insights into customer health, retention, and growth.
 ## Installation
 
 Clone the repository:
-
+```bash
 git clone https://github.com/AnastasiaSamoylova92/revenue-intelligence.git
 cd revenue-intelligence
-
+```
 Install dependencies:
+```bash
 pip install -r requirements.txt
+```
 
 ## Key Learnings
-
 Throughout this project I gained practical experience in:
 
 - Designing an enterprise-style data warehouse
@@ -300,11 +295,9 @@ Throughout this project I gained practical experience in:
 - Developing advanced DAX measures and KPI frameworks
 - Simulating realistic business scenarios using Python
 - Creating executive-ready dashboards focused on decision support
-- Applying best practices in Revenue Intelligence and Financial Analytics
 
 
 ## Author
 
 Anastasia Samoylova
-
-Business Intelligence | Data Analytics | Power BI | SQL | Python
+M.Sc. | BI & Data Analytics | ML
