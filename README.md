@@ -199,6 +199,8 @@ Provides a high-level summary of business performance and serves as the executiv
 - Product Performance
 - Forecast Reliability
 
+![Executive Overview](images/executive_overview.png)
+
 ### 2. Revenue Analysis
 Analyzes revenue performance and identifies growth drivers.
 
@@ -216,6 +218,8 @@ Analyzes revenue performance and identifies growth drivers.
 - Customer Segment Analysis
 - Product Portfolio Analysis
 
+![Revenue Analysis](images/revenue_analysis.png)
+
 ### 3. Gross Margin Analysis
 Evaluates profitability and pricing effectiveness.
 
@@ -232,6 +236,8 @@ Evaluates profitability and pricing effectiveness.
 - Pricing Power Assessment
 - Margin Risk Detection
 
+![Margin Analysis](images/margin_analysis.png)
+
 ### 4. Forecasting Analysis
 Measures forecast quality and planning effectiveness.
 
@@ -246,6 +252,8 @@ Measures forecast quality and planning effectiveness.
 - Price Variance
 - Volume Variance
 - Forecast Driver Analysis
+
+![Forecasting Analysis](images/forecasting_analysis.png)
 
 ### 5. Customer Analytics
 Provides insights into customer health, retention, and growth.
@@ -262,21 +270,6 @@ Provides insights into customer health, retention, and growth.
 - Revenue Contribution Analysis
 - Revenue at Risk Monitoring
 
-### Dashboard Gallery
-
-#### Executive Overview
-![Executive Overview](images/executive_overview.png)
-
-#### Revenue Analysis
-![Revenue Analysis](images/revenue_analysis.png)
-
-#### Gross Margin Analysis
-![Margin Analysis](images/margin_analysis.png)
-
-#### Forecasting Analysis
-![Forecasting Analysis](images/forecasting_analysis.png)
-
-#### Customer Analytics
 ![Customer Analytics](images/customer_analytics.png)
 
 ## Installation
