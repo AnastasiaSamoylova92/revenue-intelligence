@@ -1,5 +1,9 @@
 # Revenue Intelligence Platform
 
+![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-Data%20Layer-CC2927?logo=microsoftsqlserver&logoColor=white)
+![Power BI](https://img.shields.io/badge/Power%20BI-Decision%20Support-F2C811?logo=powerbi&logoColor=black)
+
 ![Executive Overview](images/executive_overview.png)
 
 ## Project Overview
