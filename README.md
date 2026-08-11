@@ -178,7 +178,7 @@ The dataset contains:
 - Customer churn behavior
 - Enterprise and SMB customer dynamics
 
-## Power BI Dashboard Suite
+## Power BI reporting layer
 
 ### 1. Executive Overview
 Provides a high-level summary of business performance and serves as the executive landing page.
