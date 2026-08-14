@@ -6,52 +6,74 @@
 
 ![Executive Overview](images/executive_overview.png)
 
-## Project Overview
-The Revenue Intelligence Platform is an end-to-end Business Intelligence solution designed to simulate a realistic enterprise environment for a global B2B technology and medical products company.
+End-to-end Business Intelligence and FP&A analytics platform built with Python, SQL Server and Power BI.
 
-The project combines data engineering, SQL-based data warehousing, financial analytics, and executive reporting to provide a comprehensive view of business performance across revenue, profitability, forecasting, products, and customers.
+The project simulates the analytics environment of a global B2B company and demonstrates how transactional data can be transformed into management insights across revenue, profitability, forecasting, products, regions and customers.
 
-Built using Python, SQL Server, and Power BI, the solution demonstrates how modern organizations can transform transactional data into actionable business insights that support executive decision-making.
+## Business Problem
+
+Management teams often receive information from multiple disconnected systems:
+
+- ERP sales transactions
+- Finance and cost data
+- CRM activity
+- Forecasting files
+- Customer master data
+- Product master data
+- Inventory systems
+
+This makes it difficult to answer seemingly simple questions such as:
+
+- Are we growing profitably?
+- Which markets are driving performance?
+- Is growth driven by price, volume, or mix?
+- Which products are creating or destroying margin?
+- How reliable are our forecasts?
+- Which forecast version performs best?
+- Which customers are expanding or churning?
+- Which commercial issues require management attention?
+
+The Revenue Intelligence Platform consolidates these perspectives into one analytical model and converts them into actionable KPIs, variance analyses and management dashboards.
 
 ## Business Objectives
-The platform is designed to answer key business questions such as:
+The platform helps answer key management questions:
 
-- How is overall revenue performing?
-- Which products, customers, and regions drive growth?
-- What factors influence profitability and margin development?
-- How accurate are revenue forecasts?
-- Where is revenue at risk?
-- Which customer segments are growing, expanding, or churning?
-- What actions should management prioritize?
+- How is revenue performing versus prior year and forecast?
+- Which products, customers, segments and regions drive growth?
+- What drives changes in gross margin?
+- How accurate are Budget, Rolling Forecast, and Latest Estimate?
+- Which customers are growing, retained, or churning?
+- Where should management focus attention?
 
 ## Key Capabilities
-### Executive Performance Management
-- Executive KPI Reporting
-- Revenue Intelligence
-- Profitability Monitoring
-- Forecast Performance Tracking
-- Customer Health Monitoring
+### Revenue & Commercial Analytics
+- Revenue and YoY growth analysis
+- Product, customer, segment and regional contribution
+- Revenue movement analysis
+- Price-Volume-Mix analysis
 
-### Commercial Analytics
-- Revenue Growth Analysis
-- Price-Volume-Mix (PVM) Analysis
-- Product Portfolio Performance
-- Customer Segmentation
-- Revenue Risk Detection
+### Profitability 
+- Gross Profit and Gross Margin
+- Average Selling Price and Unit Cost
+- Discount and margin leakage analysis
+- Pricing opportunity identification
+- Product portfolio profitability
 
-### Financial Analytics
-- Gross Profit Analysis
-- Margin Optimization
-- Forecast Accuracy Analysis
-- Pricing Performance Evaluation
+### Forecasting
+- Actual vs Budget / Rolling Forecast / Latest Estimate
+- Forecast variance and accuracy
+- Forecast bias and absolute error
+- Regional forecast performance
+- Forecast version comparison
 
-### Data & Analytics Engineering
-- Synthetic Enterprise Data Generation
-- SQL Data Warehousing
-- Star Schema Modeling
-- Power BI Semantic Model Design
-- DAX Calculations
-
+### Customer Analytics
+- Active, new and churned customers
+- Customer retention
+- Net Revenue Retention
+- Customer health
+- Cohort retention
+- Segment performance
+  
 ## Business Context
 The synthetic dataset simulates a global B2B company operating across:
 
