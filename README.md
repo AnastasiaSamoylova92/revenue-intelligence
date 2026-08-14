@@ -22,16 +22,7 @@ Management teams often receive information from multiple disconnected systems:
 - Product master data
 - Inventory systems
 
-This makes it difficult to answer seemingly simple questions such as:
-
-- Are we growing profitably?
-- Which markets are driving performance?
-- Is growth driven by price, volume, or mix?
-- Which products are creating or destroying margin?
-- How reliable are our forecasts?
-- Which forecast version performs best?
-- Which customers are expanding or churning?
-- Which commercial issues require management attention?
+This makes it difficult to really understand the business performancce. 
 
 The Revenue Intelligence Platform consolidates these perspectives into one analytical model and converts them into actionable KPIs, variance analyses and management dashboards.
 
@@ -81,28 +72,6 @@ The platform helps answer key management questions:
 - Star-schema modeling
 - Power BI semantic model
 - Advanced DAX measures
-
-
-## Business Context
-The synthetic dataset simulates a global B2B company operating across:
-
-- Multiple countries and regions
-- Multiple customer segments
-- Multiple product families
-- Multiple currencies
-- Multiple fiscal years
-
-The generated data includes realistic business dynamics such as:
-
-- Revenue growth and decline
-- Forecast inaccuracies
-- Customer churn
-- Product mix shifts
-- Margin variation
-- Regional performance differences
-- Inventory fluctuations
-- CRM activity tracking
-- Product returns
 
 ## Technology Stack
 
@@ -210,6 +179,9 @@ The dataset contains:
 - Enterprise and SMB customer dynamics
 
 ## Power BI reporting layer
+
+### 1. Executive Overview
+
 Executive landing page combining the most important commercial and financial indicators.
 
 #### KPIs
