@@ -209,7 +209,6 @@ Analyzes revenue performance and identifies growth drivers.
 - Customer Contribution
 - Product Contribution
 - Revenue Drivers
-- Revenue Risk
 - Revenue Retention
 
 #### Key Analytics
