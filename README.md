@@ -6,72 +6,72 @@
 
 ![Executive Overview](images/executive_overview.png)
 
-## Project Overview
-The Revenue Intelligence Platform is an end-to-end Business Intelligence solution designed to simulate a realistic enterprise environment for a global B2B technology and medical products company.
+End-to-end Business Intelligence and FP&A analytics platform built with Python, SQL Server and Power BI.
 
-The project combines data engineering, SQL-based data warehousing, financial analytics, and executive reporting to provide a comprehensive view of business performance across revenue, profitability, forecasting, products, and customers.
+The project simulates the analytics environment of a global B2B company and demonstrates how transactional data can be transformed into management insights across revenue, profitability, forecasting, products, regions and customers.
 
-Built using Python, SQL Server, and Power BI, the solution demonstrates how modern organizations can transform transactional data into actionable business insights that support executive decision-making.
+## Business Problem
+
+Management teams often receive information from multiple disconnected systems:
+
+- ERP sales transactions
+- Finance and cost data
+- CRM activity
+- Forecasting files
+- Customer master data
+- Product master data
+- Inventory systems
+
+This makes it difficult to really understand the business performancce. 
+
+The Revenue Intelligence Platform consolidates these perspectives into one analytical model and converts them into actionable KPIs, variance analyses and management dashboards.
 
 ## Business Objectives
-The platform is designed to answer key business questions such as:
+The platform helps answer key management questions:
 
-- How is overall revenue performing?
-- Which products, customers, and regions drive growth?
-- What factors influence profitability and margin development?
-- How accurate are revenue forecasts?
-- Where is revenue at risk?
-- Which customer segments are growing, expanding, or churning?
-- What actions should management prioritize?
+- How is revenue performing versus prior year and forecast?
+- Which products, customers, segments and regions drive growth?
+- What drives changes in gross margin?
+- How accurate are Budget, Rolling Forecast and Latest Estimate?
+- Which customers are growing, retained or churning?
+- Where should management focus attention?
 
 ## Key Capabilities
-### Executive Performance Management
-- Executive KPI Reporting
-- Revenue Intelligence
-- Profitability Monitoring
-- Forecast Performance Tracking
-- Customer Health Monitoring
+### Revenue & Commercial Analytics
+- Revenue and YoY growth analysis
+- Product, customer, segment and regional contribution
+- Revenue movement analysis
+- Price-Volume-Mix analysis
 
-### Commercial Analytics
-- Revenue Growth Analysis
-- Price-Volume-Mix (PVM) Analysis
-- Product Portfolio Performance
-- Customer Segmentation
-- Revenue Risk Detection
+### Profitability 
+- Gross Profit and Gross Margin
+- Average Selling Price and Unit Cost
+- Discount and margin leakage analysis
+- Pricing opportunity identification
+- Product portfolio profitability
 
-### Financial Analytics
-- Gross Profit Analysis
-- Margin Optimization
-- Forecast Accuracy Analysis
-- Pricing Performance Evaluation
+### Forecasting
+- Actual vs Budget / Rolling Forecast / Latest Estimate
+- Forecast variance and accuracy
+- Forecast bias and absolute error
+- Regional forecast performance
+- Forecast version comparison
 
-### Data & Analytics Engineering
-- Synthetic Enterprise Data Generation
-- SQL Data Warehousing
-- Star Schema Modeling
-- Power BI Semantic Model Design
-- DAX Calculations
+### Customer Analytics
+- Active, new and churned customers
+- Customer retention
+- Net Revenue Retention
+- Customer health
+- Cohort retention
+- Segment performance
 
-## Business Context
-The synthetic dataset simulates a global B2B company operating across:
-
-- Multiple countries and regions
-- Multiple customer segments
-- Multiple product families
-- Multiple currencies
-- Multiple fiscal years
-
-The generated data includes realistic business dynamics such as:
-
-- Revenue growth and decline
-- Forecast inaccuracies
-- Customer churn
-- Product mix shifts
-- Margin variation
-- Regional performance differences
-- Inventory fluctuations
-- CRM activity tracking
-- Product returns
+### Data Engineering & BI
+- Synthetic enterprise data generation
+- SQL Server data warehouse
+- Raw / staging / curated architecture
+- Star-schema modeling
+- Power BI semantic model
+- Advanced DAX measures
 
 ## Technology Stack
 
@@ -83,10 +83,10 @@ The generated data includes realistic business dynamics such as:
 | SQL                            | Data modeling and transformation         |
 | Power BI                       | Analytics and dashboarding               |
 | DAX                            | Business logic and KPI calculations      |
-| Git & GitHub                   | Version control and portfolio presentation |
+| GitHub                        | Version control and portfolio presentation |
 
 
-## Project Architecture
+## Repository Structure
 
 ```text
 revenue-intelligence/
@@ -164,7 +164,7 @@ The solution follows a star-schema architecture optimized for analytical workloa
 | dimRegion     | Geography and currency data           |
 | dimSalesRep   | Sales representative information      |
 
-### Dataset Characteristics
+### Dataset
 The dataset contains:
 
 - 120.000 sales transactions
@@ -181,95 +181,117 @@ The dataset contains:
 ## Power BI reporting layer
 
 ### 1. Executive Overview
-Provides a high-level summary of business performance and serves as the executive landing page.
 
-#### Key KPIs
+Executive landing page combining the most important commercial and financial indicators.
+
+#### KPIs
 - Revenue
 - Gross Margin %
 - Forecast Accuracy
 - Active Customers
-- Revenue at Risk
 - Net Revenue Retention (NRR)
 
-#### Focus Areas
-- Business Performance
-- Executive Health Score
-- Revenue Growth Drivers
+#### Analytics
+- Revenue by country
+- Revenue vs Prior Year and Forecast
 - Regional Performance
 - Product Performance
-- Forecast Reliability
+- Executive Health Score
+- Decision Brief
 
 ![Executive Overview](images/executive_overview.png)
 
 ### 2. Revenue Analysis
-Analyzes revenue performance and identifies growth drivers.
+Detailed analysis of revenue development and growth drivers.
 
-#### Focus Areas
-- Revenue Growth
-- Customer Contribution
+#### KPIs
+- Revenue
+- Units
+- Active Customers
+- Revenue per Customer
+- NRR
+
+#### Analytics
+- Revenue Trend & YoY Growth
+- Revenue Movement
+- Customer Segment Contribution
 - Product Contribution
-- Revenue Drivers
-- Revenue Retention
-
-#### Key Analytics
-- Revenue Trend Analysis
-- Price-Volume-Mix Analysis
-- Customer Segment Analysis
-- Product Portfolio Analysis
+- Top Customer and Product Variations
 
 ![Revenue Analysis](images/revenue_analysis.png)
 
-### 3. Gross Margin Analysis
-Evaluates profitability and pricing effectiveness.
+### 3.Margin & Profitability
+Focuses on profitability, pricing and margin improvement opportunities.
 
-#### Focus Areas
+#### KPIs
 - Gross Profit
-- Gross Margin %
-- Average Selling Price (ASP)
-- Margin Drivers
-- Discount Analysis
-- Product Profitability
+- Gross Margin
+- ASP
+- Margin per Unit
+- Average Discount
 
-#### Key Analytics
-- Margin Waterfall Analysis
-- Pricing Power Assessment
-- Margin Risk Detection
+#### Analytics
+- Gross Margin Trend
+- Price-Volume-Mix
+- Portfolio Profitability
+- Margin Leakage
+- ASP vs Unit Cost
+- Pricing Opportunities
 
 ![Margin Analysis](images/margin_analysis.png)
 
-### 4. Forecasting Analysis
+### 4. Forecasting 
 Measures forecast quality and planning effectiveness.
 
-#### Focus Areas
-- Forecast Accuracy
+#### KPIs
+- Forecast Revenue
+- Actual Revenue
 - Forecast Variance
-- Forecast Achievement
-- Variance Drivers
-- Rolling Forecast Outlook
+- Forecast Accuracy
 
-#### Key Analytics
-- Price Variance
-- Volume Variance
-- Forecast Driver Analysis
+#### Analytics
+- Actual vs Forecast Versions
+- Budget vs Rolling Forecast vs Latest Estimate
+- Regional Forecast Accuracy
+- Variance Drivers
+- Monthly Error & Bias
+- Version Comparison
 
 ![Forecasting Analysis](images/forecasting_analysis.png)
 
-### 5. Customer Analytics
-Provides insights into customer health, retention, and growth.
+### 5. Customer Value & Retention
+Analyzes customer acquisition, retention, churn, and value.
 
-#### Focus Areas
+#### KPIs
 - Active Customers
 - New Customers
-- Churn Customers
+- Churned Customers
 - Customer Retention
-- Revenue Concentration
+- NRR
 
-#### Key Analytics
-- Churn Risk Segmentation
-- Revenue Contribution Analysis
-- Revenue at Risk Monitoring
+#### Analytics
+- Customer Movement
+- Customer Value & Health
+- Cohort Retention
+- Segment Scorecard
 
 ![Customer Analytics](images/customer_analytics.png)
+
+## Key Learnings
+Throughout this project I gained practical experience in:
+
+- Business Intelligence & dashboard design
+- Financial and FP&A analytics
+- Revenue and profitability analysis
+- Forecast vs Actual analysis
+- Forecast accuracy and variance analysis
+- Price-Volume-Mix analysis
+- Customer retention and cohort analysis
+- SQL data warehousing
+- Dimensional modeling
+- Power BI semantic modeling
+- Advanced DAX
+- Python data generation and transformation
 
 ## Installation
 
@@ -283,17 +305,7 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
-## Key Learnings
-Throughout this project I gained practical experience in:
-
-- Designing an enterprise-style data warehouse
-- Building a scalable Power BI semantic model
-- Developing advanced DAX measures and KPI frameworks
-- Simulating realistic business scenarios using Python
-- Creating executive-ready dashboards focused on decision support
-
-
 ## Author
 
 Anastasia Samoylova
-M.Sc. | BI & Data Analytics | ML
+M.Sc. | BI & Data Analytics | Financial & Commercial Analytics | ML
