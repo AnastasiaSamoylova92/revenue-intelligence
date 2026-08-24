@@ -165,7 +165,6 @@ SELECT
     END AS forecast_error_pct
 FROM dbo.factForecast;
 
-
 CREATE OR ALTER VIEW staging.factInventory AS
 SELECT
     TRY_CAST(inventory_id AS BIGINT) AS inventory_id,
