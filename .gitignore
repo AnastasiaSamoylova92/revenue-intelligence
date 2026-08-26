@@ -4,28 +4,17 @@ __pycache__/
 
 # Virtual Environment
 .venv/
-venv/
+.python/
 
 # Secrets
 .env
-
-# Jupyter
-.ipynb_checkpoints/
-
-# VS Code
-.vscode/
-
-# PyCharm
-.idea/
 
 # Models
 models/
 *.pkl
 *.joblib
 
-# Logs
-*.log
+# Other Files
+docs/ 
+screenshots/
 
-# OS Files
-.DS_Store
-Thumbs.db
