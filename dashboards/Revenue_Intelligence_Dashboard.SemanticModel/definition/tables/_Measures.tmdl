@@ -15919,7 +15919,7 @@ table _Measures
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-DE"}
 
-	measure 'Prioritized Alert Worklist HTML' =
+	measure 'Prioritized Alert Worklist HTML' = ```
 			
 			VAR _CurrentMonth =
 			    MAX ( factMlPredictions[year_month] )
@@ -15940,7 +15940,6 @@ table _Measures
 			VAR _PreviousMonthEnd =
 			    EOMONTH ( _CurrentMonth, -1 )
 			
-			
 			-- ============================================================
 			-- HIGH-RISK PRODUCT-REGION COMBINATIONS IN CURRENT MONTH
 			-- ============================================================
@@ -15956,14 +15955,12 @@ table _Measures
 			        factMlPredictions[predicted_risk_label_num] = 2
 			    )
 			
-			
 			VAR _ProductRegionKeys =
 			    SUMMARIZE (
 			        _CurrentPredictions,
 			        factMlPredictions[product_id],
 			        factMlPredictions[region_id]
 			    )
-			
 			
 			-- ============================================================
 			-- BUILD WORKLIST BASE
@@ -16110,7 +16107,6 @@ table _Measures
 			            )
 			    )
 			
-			
 			-- ============================================================
 			-- RISK DRIVERS
 			-- ============================================================
@@ -16141,7 +16137,6 @@ table _Measures
 			            VAR _MarginBelowTarget =
 			                NOT ISBLANK ( [@TargetMargin] )
 			                    && [@GrossMargin] < [@TargetMargin]
-			
 			
 			            VAR _DriverText =
 			                    IF (
@@ -16175,7 +16170,6 @@ table _Measures
 			                        ""
 			                    )
 			
-			
 			            RETURN
 			
 			                IF (
@@ -16189,7 +16183,6 @@ table _Measures
 			                    )
 			                )
 			    )
-			
 			
 			-- ============================================================
 			-- SIX HIGHEST-PRIORITY ALERTS
@@ -16207,7 +16200,6 @@ table _Measures
 			        [@RiskScore], DESC,
 			        [@Revenue], DESC
 			    )
-			
 			
 			-- ============================================================
 			-- RANK ALERTS
@@ -16242,10 +16234,8 @@ table _Measures
 			                    )
 			    )
 			
-			
 			VAR _AlertCount =
 			    COUNTROWS ( _RankedAlerts )
-			
 			
 			-- ============================================================
 			-- CREATE HTML ROWS
@@ -16255,10 +16245,8 @@ table _Measures
 			    CONCATENATEX (
 			        _RankedAlerts,
 			
-			
 			        VAR _Rank =
 			            [@Rank]
-			
 			
 			        VAR _SKU =
 			            COALESCE (
@@ -16266,13 +16254,11 @@ table _Measures
 			                "—"
 			            )
 			
-			
 			        VAR _ProductName =
 			            COALESCE (
 			                [@ProductName],
 			                "Unknown product"
 			            )
-			
 			
 			        VAR _Region =
 			            COALESCE (
@@ -16280,17 +16266,14 @@ table _Measures
 			                "—"
 			            )
 			
-			
 			        VAR _Lifecycle =
 			            COALESCE (
 			                [@Lifecycle],
 			                "—"
 			            )
 			
-			
 			        VAR _RiskScore =
 			            [@RiskScore]
-			
 			
 			        VAR _RiskWidth =
 			            MIN (
@@ -16300,7 +16283,6 @@ table _Measures
 			                    _RiskScore * 10
 			                )
 			            )
-			
 			
 			        VAR _RevenueFormatted =
 			            IF (
@@ -16314,7 +16296,6 @@ table _Measures
 			                )
 			            )
 			
-			
 			        VAR _UnitsFormatted =
 			            IF (
 			                ISBLANK ( [@Units] ),
@@ -16326,7 +16307,6 @@ table _Measures
 			                    "#,##0"
 			                )
 			            )
-			
 			
 			        VAR _CustomersFormatted =
 			            IF (
@@ -16340,12 +16320,10 @@ table _Measures
 			                )
 			            )
 			
-			
 			        RETURN
 			
 			            "
 			            <div class='aw-row'>
-			
 			
 			                <!-- RANK -->
 			
@@ -16357,7 +16335,6 @@ table _Measures
 			                        )
 			                        & "
 			                </div>
-			
 			
 			                <!-- PRODUCT -->
 			
@@ -16377,7 +16354,6 @@ table _Measures
 			
 			                </div>
 			
-			
 			                <!-- REGION -->
 			
 			                <div class='aw-cell'>
@@ -16385,7 +16361,6 @@ table _Measures
 			                        & _Region
 			                        & "
 			                </div>
-			
 			
 			                <!-- RISK -->
 			
@@ -16399,7 +16374,6 @@ table _Measures
 			                            )
 			                            & "
 			                    </span>
-			
 			
 			                    <div class='aw-risk-track'>
 			
@@ -16415,13 +16389,11 @@ table _Measures
 			
 			                    </div>
 			
-			
 			                    <span class='aw-badge'>
 			                        HIGH RISK
 			                    </span>
 			
 			                </div>
-			
 			
 			                <!-- REVENUE -->
 			
@@ -16431,7 +16403,6 @@ table _Measures
 			                        & "
 			                </div>
 			
-			
 			                <!-- UNITS -->
 			
 			                <div class='aw-cell aw-number'>
@@ -16439,7 +16410,6 @@ table _Measures
 			                        & _UnitsFormatted
 			                        & "
 			                </div>
-			
 			
 			                <!-- CUSTOMERS -->
 			
@@ -16449,7 +16419,6 @@ table _Measures
 			                        & "
 			                </div>
 			
-			
 			                <!-- LIFECYCLE -->
 			
 			                <div class='aw-cell aw-center'>
@@ -16457,7 +16426,6 @@ table _Measures
 			                        & _Lifecycle
 			                        & "
 			                </div>
-			
 			
 			                <!-- DRIVERS -->
 			
@@ -16467,7 +16435,6 @@ table _Measures
 			                        & "
 			                </div>
 			
-			
 			            </div>
 			            ",
 			
@@ -16475,7 +16442,6 @@ table _Measures
 			
 			        [@Rank], ASC
 			    )
-			
 			
 			-- ============================================================
 			-- FINAL HTML
@@ -16504,7 +16470,6 @@ table _Measures
 			    "
 			    <style>
 			
-			
 			        /* ====================================================
 			           GLOBAL
 			           ==================================================== */
@@ -16515,7 +16480,6 @@ table _Measures
 			            padding:0;
 			            font-family:'Segoe UI',Arial,sans-serif;
 			        }
-			
 			
 			        /* ====================================================
 			           CONTAINER
@@ -16531,7 +16495,6 @@ table _Measures
 			            border:1px solid rgba(51,16,69,.14);
 			            border-radius:5px;
 			        }
-			
 			
 			        /* ====================================================
 			           TITLE
@@ -16549,7 +16512,6 @@ table _Measures
 			            border-bottom:1px solid #DDD8DF;
 			        }
 			
-			
 			        .aw-title {
 			            color:#000000;
 			
@@ -16558,7 +16520,6 @@ table _Measures
 			
 			            text-transform:uppercase;
 			        }
-			
 			
 			        .aw-count {
 			            padding:2px 5px;
@@ -16574,7 +16535,6 @@ table _Measures
 			
 			            white-space:nowrap;
 			        }
-			
 			
 			        /* ====================================================
 			           TABLE GRID
@@ -16601,7 +16561,6 @@ table _Measures
 			            min-width:940px;
 			        }
 			
-			
 			        /* ====================================================
 			           HEADER
 			           ==================================================== */
@@ -16616,9 +16575,8 @@ table _Measures
 			            border-bottom:1px solid #DDD8DF;
 			
 			            font-size:12px;
-			            font-weight:400;
+			            font-weight:700;
 			        }
-			
 			
 			        /*
 			            ALL COLUMN HEADERS CENTERED
@@ -16627,7 +16585,6 @@ table _Measures
 			        .aw-header > div {
 			            text-align:center;
 			        }
-			
 			
 			        /* ====================================================
 			           COMMON CELLS
@@ -16643,13 +16600,11 @@ table _Measures
 			            border-right:1px solid #ECE8ED;
 			        }
 			
-			
 			        .aw-header > div:last-child,
 			        .aw-row > div:last-child {
 			
 			            border-right:none;
 			        }
-			
 			
 			        /* ====================================================
 			           DATA ROWS
@@ -16666,21 +16621,17 @@ table _Measures
 			            font-size:11px;
 			        }
 			
-			
 			        .aw-row:last-child {
 			            border-bottom:none;
 			        }
-			
 			
 			        .aw-row:nth-child(even) {
 			            background:#FBFAFB;
 			        }
 			
-			
 			        .aw-row:hover {
 			            background:#F4F0F6;
 			        }
-			
 			
 			        /* ====================================================
 			           RANK
@@ -16694,7 +16645,6 @@ table _Measures
 			
 			            font-weight:400;
 			        }
-			
 			
 			        /* ====================================================
 			           PRODUCT
@@ -16711,7 +16661,6 @@ table _Measures
 			            white-space:nowrap;
 			        }
 			
-			
 			        .aw-sku {
 			
 			            flex-shrink:0;
@@ -16721,7 +16670,6 @@ table _Measures
 			            font-weight:400;
 			        }
 			
-			
 			        .aw-name {
 			
 			            overflow:hidden;
@@ -16730,7 +16678,6 @@ table _Measures
 			
 			            text-overflow:ellipsis;
 			        }
-			
 			
 			        /* ====================================================
 			           STANDARD CELLS
@@ -16744,7 +16691,6 @@ table _Measures
 			            text-overflow:ellipsis;
 			        }
 			
-			
 			        .aw-number {
 			
 			            text-align:center;
@@ -16752,11 +16698,9 @@ table _Measures
 			            font-variant-numeric:tabular-nums;
 			        }
 			
-			
 			        .aw-center {
 			            text-align:center;
 			        }
-			
 			
 			        /* ====================================================
 			           RISK SCORE
@@ -16771,7 +16715,6 @@ table _Measures
 			            min-width:0;
 			        }
 			
-			
 			        .aw-risk-number {
 			
 			            width:24px;
@@ -16785,7 +16728,6 @@ table _Measures
 			
 			            font-variant-numeric:tabular-nums;
 			        }
-			
 			
 			        .aw-risk-track {
 			
@@ -16804,7 +16746,6 @@ table _Measures
 			            border-radius:2px;
 			        }
 			
-			
 			        .aw-risk-fill {
 			
 			            height:100%;
@@ -16819,7 +16760,6 @@ table _Measures
 			
 			            border-radius:2px;
 			        }
-			
 			
 			        .aw-badge {
 			
@@ -16838,7 +16778,6 @@ table _Measures
 			            white-space:nowrap;
 			        }
 			
-			
 			        /* ====================================================
 			           DRIVERS
 			           ==================================================== */
@@ -16854,12 +16793,9 @@ table _Measures
 			            white-space:normal;
 			        }
 			
-			
 			    </style>
 			
-			
 			    <div class='aw-container'>
-			
 			
 			        <!-- ================================================
 			             TITLE
@@ -16881,7 +16817,6 @@ table _Measures
 			            </div>
 			
 			        </div>
-			
 			
 			        <!-- ================================================
 			             COLUMN HEADERS
@@ -16927,7 +16862,6 @@ table _Measures
 			
 			        </div>
 			
-			
 			        <!-- ================================================
 			             DATA ROWS
 			             ================================================ -->
@@ -16936,10 +16870,12 @@ table _Measures
 			            & _RowsHTML
 			            & "
 			
-			
 			    </div>
 			    "
 			)
+			
+			
+			```
 		displayFolder: 01 Risk
 		lineageTag: 8875150b-c07c-436e-a351-984a9240512e
 
@@ -20795,7 +20731,7 @@ table _Measures
 			        "<circle cx='" & FORMAT ( [@X], "0" )
 			            & "' cy='" & FORMAT ( [@LatestY], "0" )
 			            & "' r='3.2'
-			                 fill='#2F8F78'/>",
+			                 fill='#D99A2B'/>",
 			
 			        "",
 			        [@MonthNumber],
@@ -20995,7 +20931,7 @@ table _Measures
 			            }
 			
 			            .afv-latest-key {
-			                border-top:3px solid #2F8F78;
+			                border-top:3px solid #D99A2B;
 			            }
 			
 			            .afv-chart {
@@ -21128,7 +21064,7 @@ table _Measures
 			                    & "<polyline points='"
 			                    & _LatestPoints
 			                    & "' fill='none'
-			                         stroke='#2F8F78'
+			                         stroke='#D99A2B'
 			                         stroke-width='3'
 			                         stroke-linejoin='round'
 			                         stroke-linecap='round'/>"
@@ -22731,7 +22667,7 @@ table _Measures
 		displayFolder: 03 Forecasting
 		lineageTag: 19da3507-2489-4c95-b2f0-7ef300c8145a
 
-	measure 'Forecast Version Comparison HTML' =
+	measure 'Forecast Version Comparison HTML' = ```
 			
 			VAR _Versions =
 			    DATATABLE (
@@ -22742,10 +22678,9 @@ table _Measures
 			        {
 			            { "Budget", "Budget", "#B7B7B7", 1 },
 			            { "Rolling Forecast", "Rolling Forecast", "#5B9FB4", 2 },
-			            { "Latest Estimate", "Latest Forecast", "#23915B", 3 }
+			            { "Latest Estimate", "Latest Forecast", "#D99A2B ", 3 }
 			        }
 			    )
-			
 			
 			VAR _LastActualForecastMonth =
 			    CALCULATE (
@@ -22755,13 +22690,11 @@ table _Measures
 			        factForecast[actual_revenue_eur] <> BLANK ()
 			    )
 			
-			
 			VAR _StartMonth =
 			    EDATE ( _LastActualForecastMonth, -11 )
 			
 			VAR _EndMonth =
 			    EDATE ( _LastActualForecastMonth, 1 )
-			
 			
 			VAR _BaseData =
 			    ADDCOLUMNS (
@@ -22798,7 +22731,6 @@ table _Measures
 			                )
 			    )
 			
-			
 			VAR _ErrorData =
 			    ADDCOLUMNS (
 			        _BaseData,
@@ -22810,7 +22742,6 @@ table _Measures
 			                ABS ( [@Actual] - [@Forecast] )
 			            )
 			    )
-			
 			
 			VAR _Data =
 			    ADDCOLUMNS (
@@ -22831,7 +22762,6 @@ table _Measures
 			            )
 			    )
 			
-			
 			VAR _ValidData =
 			    FILTER (
 			        _Data,
@@ -22840,7 +22770,6 @@ table _Measures
 			
 			VAR _HasData =
 			    COUNTROWS ( _ValidData ) > 0
-			
 			
 			VAR _MinimumAccuracyRaw =
 			    MINX (
@@ -22863,7 +22792,6 @@ table _Measures
 			        1 - _AccuracyMinimum
 			    )
 			
-			
 			VAR _MaximumError =
 			    MAX (
 			        1,
@@ -22873,14 +22801,12 @@ table _Measures
 			        ) * 1.15
 			    )
 			
-			
 			/* =========================================================
 			   RESPONSIVE SVG GEOMETRY
 			   ========================================================= */
 			
 			VAR _SvgWidth = 500
 			VAR _SvgHeight = 270
-			
 			
 			/* Left panel: Forecast Accuracy */
 			VAR _AccuracyLeft = 20
@@ -22894,7 +22820,6 @@ table _Measures
 			        2
 			    )
 			
-			
 			/* Right panel: Absolute Error */
 			VAR _ErrorLeft = 278
 			VAR _ErrorRight = 463
@@ -22907,7 +22832,6 @@ table _Measures
 			        2
 			    )
 			
-			
 			/* Vertical geometry */
 			VAR _HeaderY = 25
 			VAR _RowTop = 50
@@ -22916,7 +22840,6 @@ table _Measures
 			
 			VAR _AxisY = 225
 			VAR _AxisLabelY = 247
-			
 			
 			/* =========================================================
 			   ACCURACY BARS
@@ -23022,7 +22945,6 @@ table _Measures
 			        [Sort], ASC
 			    )
 			
-			
 			/* =========================================================
 			   ERROR BARS
 			   ========================================================= */
@@ -23058,7 +22980,7 @@ table _Measures
 			                    & FORMAT (
 			                        [@Error] / 1000000,
 			                        "€0.0m",
-			                        "en-US"
+			                        "de-DE"
 			                    )
 			                    & " absolute error
 			                </title>
@@ -23119,7 +23041,7 @@ table _Measures
 			                        & FORMAT (
 			                            [@Error] / 1000000,
 			                            "0.0",
-			                            "en-US"
+			                            "de-DE"
 			                        )
 			                        & "
 			                </text>
@@ -23128,7 +23050,6 @@ table _Measures
 			        "",
 			        [Sort], ASC
 			    )
-			
 			
 			VAR _AccuracyMid =
 			    DIVIDE (
@@ -23141,7 +23062,6 @@ table _Measures
 			        _MaximumError,
 			        2
 			    )
-			
 			
 			RETURN
 			    IF (
@@ -23174,7 +23094,6 @@ table _Measures
 			                height:auto;
 			            }
 			
-			
 			            .fvc-card {
 			                width:100%;
 			                padding:10px 12px 8px;
@@ -23185,7 +23104,6 @@ table _Measures
 			                overflow:hidden;
 			            }
 			
-			
 			            .fvc-header {
 			                display:flex;
 			                align-items:baseline;
@@ -23194,14 +23112,12 @@ table _Measures
 			                row-gap:2px;
 			            }
 			
-			
 			            .fvc-title {
 			                color:#211D22;
 			                font-size:16px;
 			                line-height:20px;
 			                font-weight:700;
 			            }
-			
 			
 			            .fvc-period {
 			                color:#777079;
@@ -23210,7 +23126,6 @@ table _Measures
 			                font-weight:500;
 			                white-space:nowrap;
 			            }
-			
 			
 			            .fvc-legend {
 			                display:flex;
@@ -23226,7 +23141,6 @@ table _Measures
 			                line-height:14px;
 			            }
 			
-			
 			            .fvc-item {
 			                display:flex;
 			                align-items:center;
@@ -23234,14 +23148,12 @@ table _Measures
 			                white-space:nowrap;
 			            }
 			
-			
 			            .fvc-swatch {
 			                flex:0 0 auto;
 			                width:11px;
 			                height:11px;
 			                border-radius:50%;
 			            }
-			
 			
 			            .fvc-svg {
 			                display:block;
@@ -23255,14 +23167,12 @@ table _Measures
 			                overflow:visible;
 			            }
 			
-			
 			            .fvc-head {
 			                fill:#302A31;
 			                font-family:'Segoe UI',Arial,sans-serif;
 			                font-size:15px;
-			                font-weight:700;
+			                font-weight:400;
 			            }
-			
 			
 			            .fvc-axis {
 			                fill:#6A646C;
@@ -23271,14 +23181,12 @@ table _Measures
 			                font-weight:500;
 			            }
 			
-			
 			            .fvc-value {
 			                fill:#3F3940;
 			                font-family:'Segoe UI',Arial,sans-serif;
 			                font-size:15px;
-			                font-weight:700;
+			                font-weight:400;
 			            }
-			
 			
 			            @media (max-width:420px) {
 			
@@ -23302,9 +23210,7 @@ table _Measures
 			
 			        </style>
 			
-			
 			        <div class='fvc-card'>
-			
 			
 			            <div class='fvc-header'>
 			
@@ -23313,7 +23219,6 @@ table _Measures
 			                </div>
 			
 			            </div>
-			
 			
 			            <div class='fvc-legend'>
 			
@@ -23336,13 +23241,12 @@ table _Measures
 			                <div class='fvc-item'>
 			                    <span
 			                        class='fvc-swatch'
-			                        style='background:#23915B'>
+			                        style='background:#D99A2B'>
 			                    </span>
 			                    <span>Latest Forecast</span>
 			                </div>
 			
 			            </div>
-			
 			
 			            <svg
 			                class='fvc-svg'
@@ -23360,7 +23264,6 @@ table _Measures
 			                    )
 			                    & "'
 			                preserveAspectRatio='xMidYMin meet'>
-			
 			
 			                <text
 			                    x='"
@@ -23382,7 +23285,6 @@ table _Measures
 			                    Forecast Accuracy (%)
 			                </text>
 			
-			
 			                <text
 			                    x='"
 			                        & FORMAT (
@@ -23403,12 +23305,10 @@ table _Measures
 			                    Absolute Error (€m)
 			                </text>
 			
-			
 			                "
 			                    & _AccuracyBars
 			                    & _ErrorBars
 			                    & "
-			
 			
 			                <line
 			                    x1='"
@@ -23442,7 +23342,6 @@ table _Measures
 			                    stroke='#C9C4CB'
 			                    stroke-width='1'
 			                />
-			
 			
 			                <text
 			                    x='"
@@ -23468,7 +23367,6 @@ table _Measures
 			                        & "
 			                </text>
 			
-			
 			                <text
 			                    x='"
 			                        & FORMAT (
@@ -23493,7 +23391,6 @@ table _Measures
 			                        & "
 			                </text>
 			
-			
 			                <text
 			                    x='"
 			                        & FORMAT (
@@ -23513,7 +23410,6 @@ table _Measures
 			                    class='fvc-axis'>
 			                    100%
 			                </text>
-			
 			
 			                <line
 			                    x1='"
@@ -23548,7 +23444,6 @@ table _Measures
 			                    stroke-width='1'
 			                />
 			
-			
 			                <text
 			                    x='"
 			                        & FORMAT (
@@ -23568,7 +23463,6 @@ table _Measures
 			                    class='fvc-axis'>
 			                    0
 			                </text>
-			
 			
 			                <text
 			                    x='"
@@ -23590,11 +23484,10 @@ table _Measures
 			                        & FORMAT (
 			                            _ErrorMid / 1000000,
 			                            "0.0",
-			                            "en-US"
+			                            "de-DE"
 			                        )
 			                        & "
 			                </text>
-			
 			
 			                <text
 			                    x='"
@@ -23616,17 +23509,18 @@ table _Measures
 			                        & FORMAT (
 			                            _MaximumError / 1000000,
 			                            "0.0",
-			                            "en-US"
+			                            "de-DE"
 			                        )
 			                        & "
 			                </text>
-			
 			
 			            </svg>
 			
 			        </div>
 			        "
 			    )
+			
+			```
 		displayFolder: 03 Forecasting
 		lineageTag: 0d573a9a-0fde-4bea-9411-f48a2788ab9a
 
@@ -25333,7 +25227,7 @@ table _Measures
 			    "
 		lineageTag: eae56f6d-e814-451e-9d30-872b7959a24f
 
-	measure 'Priority Actions HTML' =
+	measure 'Priority Actions HTML' = ```
 			
 			VAR _LatestMonth =
 			    CALCULATE (
@@ -25365,7 +25259,6 @@ table _Measures
 			        "en-US"
 			    )
 			
-			
 			-- ============================================================
 			-- EXISTING PRODUCT-REGION COMBINATIONS IN LATEST ML MONTH
 			-- ============================================================
@@ -25387,7 +25280,6 @@ table _Measures
 			        factMlPredictions[product_id],
 			        factMlPredictions[region_id]
 			    )
-			
 			
 			-- ============================================================
 			-- ADD PRODUCT, RISK AND COMMERCIAL INFORMATION
@@ -25627,7 +25519,6 @@ table _Measures
 			                )
 			    )
 			
-			
 			-- ============================================================
 			-- CALCULATE CHANGES
 			-- ============================================================
@@ -25646,7 +25537,6 @@ table _Measures
 			                [@GrossMargin] - [@TargetMargin]
 			            )
 			    )
-			
 			
 			-- ============================================================
 			-- CRITICAL PRODUCTS
@@ -25670,7 +25560,6 @@ table _Measures
 			        [@RiskScore], DESC,
 			        [@Revenue], DESC
 			    )
-			
 			
 			VAR _BadgeText =
 			    IF (
@@ -25696,7 +25585,6 @@ table _Measures
 			                "s"
 			            )
 			    )
-			
 			
 			-- ============================================================
 			-- CREATE HTML TABLE ROWS
@@ -25748,7 +25636,6 @@ table _Measures
 			        VAR _MarginGap =
 			            [@MarginGap]
 			
-			
 			        -- ====================================================
 			        -- DRIVER TAGS
 			        -- ====================================================
@@ -25788,14 +25675,12 @@ table _Measures
 			                [Show]
 			            )
 			
-			
 			        VAR _TopDrivers =
 			            TOPN (
 			                2,
 			                _DriverTable,
 			                [Priority], ASC
 			            )
-			
 			
 			        VAR _DriverHTML =
 			            IF (
@@ -25811,7 +25696,6 @@ table _Measures
 			                )
 			            )
 			
-			
 			        -- ====================================================
 			        -- FORMATTING
 			        -- ====================================================
@@ -25825,7 +25709,6 @@ table _Measures
 			                )
 			            )
 			
-			
 			        VAR _RiskFormatted =
 			            IF (
 			                ISBLANK ( _RiskScore ),
@@ -25836,7 +25719,6 @@ table _Measures
 			                    "de-DE"
 			                )
 			            )
-			
 			
 			        VAR _RevenueFormatted =
 			            SWITCH (
@@ -25876,7 +25758,6 @@ table _Measures
 			                )
 			            )
 			
-			
 			        VAR _ChangeText =
 			            SWITCH (
 			                TRUE (),
@@ -25905,7 +25786,6 @@ table _Measures
 			                "— 0.0% vs PM"
 			            )
 			
-			
 			        VAR _ChangeColor =
 			            SWITCH (
 			                TRUE (),
@@ -25915,11 +25795,9 @@ table _Measures
 			                "#7A7480"
 			            )
 			
-			
 			        RETURN
 			            "
 			            <div class='pa-row'>
-			
 			
 			                <!-- PRODUCT -->
 			
@@ -25935,13 +25813,11 @@ table _Measures
 			
 			                </div>
 			
-			
 			                <!-- REGION -->
 			
 			                <div class='pa-cell'>
 			                    " & _Region & "
 			                </div>
-			
 			
 			                <!-- RISK -->
 			
@@ -25971,13 +25847,11 @@ table _Measures
 			
 			                </div>
 			
-			
 			                <!-- REVENUE -->
 			
 			                <div class='pa-cell pa-number pa-revenue'>
 			                    " & _RevenueFormatted & "
 			                </div>
-			
 			
 			                <!-- DRIVERS -->
 			
@@ -25985,13 +25859,11 @@ table _Measures
 			                    " & _DriverHTML & "
 			                </div>
 			
-			
 			                <!-- LIFECYCLE -->
 			
 			                <div class='pa-cell pa-center'>
 			                    " & _Lifecycle & "
 			                </div>
-			
 			
 			                <!-- LATEST CHANGE -->
 			
@@ -26005,7 +25877,6 @@ table _Measures
 			
 			                </div>
 			
-			
 			            </div>
 			            ",
 			
@@ -26013,7 +25884,6 @@ table _Measures
 			        [@RiskScore], DESC,
 			        [@Revenue], DESC
 			    )
-			
 			
 			-- ============================================================
 			-- FINAL HTML
@@ -26062,7 +25932,6 @@ table _Measures
 			        "
 			        <style>
 			
-			
 			            /* =================================================
 			               GLOBAL
 			               ================================================= */
@@ -26073,7 +25942,6 @@ table _Measures
 			                padding:0;
 			                font-family:'Segoe UI',Arial,sans-serif;
 			            }
-			
 			
 			            /* =================================================
 			               MAIN CONTAINER
@@ -26088,7 +25956,6 @@ table _Measures
 			                border:1px solid rgba(51,16,69,.14);
 			                border-radius:5px;
 			            }
-			
 			
 			            /* =================================================
 			               TITLE
@@ -26106,7 +25973,6 @@ table _Measures
 			                border-bottom:1px solid #DDD8DF;
 			            }
 			
-			
 			            .pa-title {
 			                color:#000000;
 			
@@ -26116,7 +25982,6 @@ table _Measures
 			                text-transform:uppercase;
 			                white-space:nowrap;
 			            }
-			
 			
 			            .pa-count {
 			                padding:2px 5px;
@@ -26132,7 +25997,6 @@ table _Measures
 			
 			                white-space:nowrap;
 			            }
-			
 			
 			            /* =================================================
 			               TABLE GRID
@@ -26156,7 +26020,6 @@ table _Measures
 			                min-width:780px;
 			            }
 			
-			
 			            /* =================================================
 			               HEADER
 			               ================================================= */
@@ -26170,9 +26033,8 @@ table _Measures
 			                border-bottom:1px solid #DDD8DF;
 			
 			                font-size:12px;
-			                font-weight:400;
+			                font-weight:700;
 			            }
-			
 			
 			            /*
 			               ALL COLUMN HEADERS CENTERED
@@ -26181,7 +26043,6 @@ table _Measures
 			            .pa-header > div {
 			                text-align:center;
 			            }
-			
 			
 			            /* =================================================
 			               COMMON CELL FORMATTING
@@ -26196,12 +26057,10 @@ table _Measures
 			                border-right:1px solid #ECE8ED;
 			            }
 			
-			
 			            .pa-header > div:last-child,
 			            .pa-row > div:last-child {
 			                border-right:none;
 			            }
-			
 			
 			            /* =================================================
 			               DATA ROWS
@@ -26217,21 +26076,17 @@ table _Measures
 			                font-size:11px;
 			            }
 			
-			
 			            .pa-row:last-child {
 			                border-bottom:none;
 			            }
-			
 			
 			            .pa-row:nth-child(even) {
 			                background:#FBFAFB;
 			            }
 			
-			
 			            .pa-row:hover {
 			                background:#F4F0F6;
 			            }
-			
 			
 			            /* =================================================
 			               PRODUCT
@@ -26247,7 +26102,6 @@ table _Measures
 			                white-space:nowrap;
 			            }
 			
-			
 			            .pa-sku {
 			                flex-shrink:0;
 			
@@ -26256,7 +26110,6 @@ table _Measures
 			                font-weight:400;
 			            }
 			
-			
 			            .pa-name {
 			                overflow:hidden;
 			
@@ -26264,7 +26117,6 @@ table _Measures
 			
 			                text-overflow:ellipsis;
 			            }
-			
 			
 			            /* =================================================
 			               STANDARD CELLS
@@ -26277,18 +26129,15 @@ table _Measures
 			                text-overflow:ellipsis;
 			            }
 			
-			
 			            .pa-number {
 			                text-align:center;
 			
 			                font-variant-numeric:tabular-nums;
 			            }
 			
-			
 			            .pa-center {
 			                text-align:center;
 			            }
-			
 			
 			            /* =================================================
 			               RISK SCORE
@@ -26302,7 +26151,6 @@ table _Measures
 			                min-width:0;
 			            }
 			
-			
 			            .pa-risk-number {
 			                width:24px;
 			                flex-shrink:0;
@@ -26314,7 +26162,6 @@ table _Measures
 			
 			                font-variant-numeric:tabular-nums;
 			            }
-			
 			
 			            .pa-risk-track {
 			                position:relative;
@@ -26330,7 +26177,6 @@ table _Measures
 			                border-radius:2px;
 			            }
 			
-			
 			            .pa-risk-fill {
 			                height:100%;
 			                min-width:3px;
@@ -26343,7 +26189,6 @@ table _Measures
 			
 			                border-radius:2px;
 			            }
-			
 			
 			            .pa-risk-badge {
 			                flex-shrink:0;
@@ -26361,7 +26206,6 @@ table _Measures
 			                white-space:nowrap;
 			            }
 			
-			
 			            /* =================================================
 			               REVENUE
 			               ================================================= */
@@ -26376,7 +26220,6 @@ table _Measures
 			                font-variant-numeric:tabular-nums;
 			            }
 			
-			
 			            /* =================================================
 			               DRIVERS
 			               ================================================= */
@@ -26390,7 +26233,6 @@ table _Measures
 			
 			                white-space:normal;
 			            }
-			
 			
 			            /* =================================================
 			               LATEST CHANGE
@@ -26407,12 +26249,9 @@ table _Measures
 			                font-variant-numeric:tabular-nums;
 			            }
 			
-			
 			        </style>
 			
-			
 			        <div class='pa-container'>
-			
 			
 			            <!-- =============================================
 			                 TITLE
@@ -26429,7 +26268,6 @@ table _Measures
 			                </div>
 			
 			            </div>
-			
 			
 			            <!-- =============================================
 			                 COLUMN HEADERS
@@ -26467,18 +26305,19 @@ table _Measures
 			
 			            </div>
 			
-			
 			            <!-- =============================================
 			                 DATA ROWS
 			                 ============================================= -->
 			
 			            " & _RowsHTML & "
 			
-			
 			        </div>
 			        "
 			    )
 			)
+			
+			
+			```
 		displayFolder: 01 Risk
 		lineageTag: fca3d0c2-7078-453f-98df-fb5154716b8f
 
@@ -28073,7 +27912,9 @@ table _Measures
 			                )
 			
 			            RETURN
-			[Revenue PY])
+			                [Revenue PY]
+			    )
+			
 			
 			VAR _GrowthData =
 			    ADDCOLUMNS (
@@ -28086,7 +27927,8 @@ table _Measures
 			            VAR _PreviousRevenue =
 			                [@RevenuePrevious]
 			
-			            RETURN [Revenue YoY %]
+			            RETURN
+			                [Revenue YoY %]
 			    )
 			
 			
@@ -28361,8 +28203,8 @@ table _Measures
 			
 			        "<circle cx='" & FORMAT ( [@X], "0.0", "en-US" )
 			            & "' cy='" & FORMAT ( [@PreviousY], "0.0", "en-US" )
-			            & "' r='3.5'
-			                 fill='#6F1D83'
+			            & "' r='2.5'
+			                 fill='#8A858C'
 			                 stroke='#FFFFFF'
 			                 stroke-width='1.5'>"
 			            &
@@ -28576,12 +28418,12 @@ table _Measures
 			                width:10px;
 			                height:7px;
 			                border-radius:1px;
-			                background:#5B9FB4;
+			                background:#331045;
 			            }
 			
 			            .rtg-line-key {
 			                width:16px;
-			                border-top:2.5px solid #6F1D83;
+			                border-top:2.5px solid #8A858C;
 			            }
 			
 			            .rtg-growth-key {
@@ -28684,9 +28526,9 @@ table _Measures
 			                                    x2='0'
 			                                    y2='1'>
 			                        <stop offset='0%'
-			                              stop-color='#6BAFC1'/>
+			                              stop-color='#331045'/>
 			                        <stop offset='100%'
-			                              stop-color='#4F93A7'/>
+			                              stop-color='#331045'/>
 			                    </linearGradient>
 			                </defs>
 			
@@ -28698,7 +28540,7 @@ table _Measures
 			                "<polyline points='"
 			                    & _PriorYearPoints
 			                    & "' fill='none'
-			                         stroke='#6F1D83'
+			                         stroke='#8A858C'
 			                         stroke-width='2.2'
 			                         stroke-linejoin='round'
 			                         stroke-linecap='round'/>"

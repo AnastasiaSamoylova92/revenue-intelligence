@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "693b00e0095da8a545bb",
   "position": {
     "x": 438.18181818181813,
@@ -17,22 +17,17 @@
           "projections": [
             {
               "field": {
-                "HierarchyLevel": {
+                "Column": {
                   "Expression": {
-                    "Hierarchy": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "dimDate"
-                        }
-                      },
-                      "Hierarchy": "Year Hierarchy"
+                    "SourceRef": {
+                      "Entity": "dimDate"
                     }
                   },
-                  "Level": "MonthShortName"
+                  "Property": "MonthYear"
                 }
               },
-              "queryRef": "dimDate.Year Hierarchy.MonthShortName",
-              "nativeQueryRef": "Year Hierarchy MonthShortName",
+              "queryRef": "dimDate.MonthYear",
+              "nativeQueryRef": "MonthYear",
               "active": true
             }
           ]
@@ -742,6 +737,7 @@
             }
           ]
         },
+        "howCreated": "User",
         "objects": {
           "general": [
             {

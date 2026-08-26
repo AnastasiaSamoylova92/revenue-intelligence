@@ -20493,7 +20493,7 @@ cultureInfo en-US
 			          }
 			        },
 			        {
-			          "Customers": {
+			          "# Customers": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -24651,16 +24651,6 @@ cultureInfo en-US
 			              "Agent": "Thesaurus"
 			            },
 			            "Weight": 0.609
-			          }
-			        },
-			        {
-			          "Revenue / Customer": {
-			            "State": "Suggested",
-			            "Source": {
-			              "Type": "External",
-			              "Agent": "PowerBI.VisualColumnRename"
-			            },
-			            "Weight": 0.9
 			          }
 			        }
 			      ]
@@ -55889,240 +55879,359 @@ cultureInfo en-US
 			          }
 			        }
 			      ]
+			    },
+			    "entity__measure.title_risk_operations": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Measures",
+			          "ConceptualProperty": "Title Risk Operations"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "title risk operations": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "operations": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "risk operations": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "designation risk operation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.609
+			          }
+			        },
+			        {
+			          "name risk operation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
+			          }
+			        },
+			        {
+			          "award risk operation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
+			          }
+			        },
+			        {
+			          "call risk operation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
+			          }
+			        },
+			        {
+			          "heading risk operation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
+			          }
+			        },
+			        {
+			          "label risk operation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.591
+			          }
+			        },
+			        {
+			          "title risk procedure": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "title risk setup": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.508
+			          }
+			        },
+			        {
+			          "risk procedure": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        },
+			        {
+			          "risk setup": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.5
+			          }
+			        }
+			      ]
+			    },
+			    "entity__measure.product_risk_assessment_HTML": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Measures",
+			          "ConceptualProperty": "Product Risk Assessment HTML"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "product risk assessment HTML": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "HTML": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "assessment HTML": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "risk assessment HTML": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "artifact risk assessment html": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.617
+			          }
+			        },
+			        {
+			          "item risk assessment html": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "merchandise risk assessment html": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "produce risk assessment html": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        }
+			      ]
+			    },
+			    "entity__measure.product_risk_explanation_HTML": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Measures",
+			          "ConceptualProperty": "Product Risk Explanation HTML"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "product risk explanation HTML": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "HTML": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "explanation HTML": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "risk explanation HTML": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "artifact risk explanation html": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.617
+			          }
+			        },
+			        {
+			          "item risk explanation html": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "merchandise risk explanation html": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "produce risk explanation html": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        }
+			      ]
+			    },
+			    "entity__measure.product_commercial_snapshot_HTML": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "_Measures",
+			          "ConceptualProperty": "Product Commercial Snapshot HTML"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "product commercial snapshot HTML": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "HTML": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "snapshot HTML": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "commercial snapshot HTML": {
+			            "State": "Generated",
+			            "Weight": 0.97
+			          }
+			        },
+			        {
+			          "artifact commercial snapshot html": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.617
+			          }
+			        },
+			        {
+			          "item commercial snapshot html": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "merchandise commercial snapshot html": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        },
+			        {
+			          "produce commercial snapshot html": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.599
+			          }
+			        }
+			      ]
 			    }
 			  },
 			  "Relationships": {
-			    "fact_market_signal_year_month_has_date_hierarchy": {
-			      "Binding": {
-			        "ConceptualEntity": "factMarketSignals"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "fact_market_signal.year_month": {
-			          "Target": {
-			            "Entity": "fact_market_signal.year_month"
-			          }
-			        },
-			        "fact_market_signal.year_month.date_hierarchy": {
-			          "Target": {
-			            "Entity": "fact_market_signal.year_month.date_hierarchy"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "fact_market_signal.year_month"
-			            },
-			            "Object": {
-			              "Role": "fact_market_signal.year_month.date_hierarchy"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "year_months_have_year_month_date_hierarchies"
-			        }
-			      ]
-			    },
-			    "fact_market_activity_year_month_date_hierarchy_has_fact_market_activity_year_month_day": {
-			      "Binding": {
-			        "ConceptualEntity": "factMarketActivities"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "fact_market_activity.year_month.date_hierarchy": {
-			          "Target": {
-			            "Entity": "fact_market_activity.year_month.date_hierarchy"
-			          }
-			        },
-			        "fact_market_activity.year_month.day": {
-			          "Target": {
-			            "Entity": "fact_market_activity.year_month.day"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "fact_market_activity.year_month.date_hierarchy"
-			            },
-			            "Object": {
-			              "Role": "fact_market_activity.year_month.day"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_days"
-			        }
-			      ]
-			    },
-			    "fact_market_activity_year_month_date_hierarchy_has_fact_market_activity_year_month_month": {
-			      "Binding": {
-			        "ConceptualEntity": "factMarketActivities"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "fact_market_activity.year_month.date_hierarchy": {
-			          "Target": {
-			            "Entity": "fact_market_activity.year_month.date_hierarchy"
-			          }
-			        },
-			        "fact_market_activity.year_month.month": {
-			          "Target": {
-			            "Entity": "fact_market_activity.year_month.month"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "fact_market_activity.year_month.date_hierarchy"
-			            },
-			            "Object": {
-			              "Role": "fact_market_activity.year_month.month"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_months"
-			        }
-			      ]
-			    },
-			    "fact_market_activity_year_month_date_hierarchy_has_fact_market_activity_year_month_quarter": {
-			      "Binding": {
-			        "ConceptualEntity": "factMarketActivities"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "fact_market_activity.year_month.date_hierarchy": {
-			          "Target": {
-			            "Entity": "fact_market_activity.year_month.date_hierarchy"
-			          }
-			        },
-			        "fact_market_activity.year_month.quarter": {
-			          "Target": {
-			            "Entity": "fact_market_activity.year_month.quarter"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "fact_market_activity.year_month.date_hierarchy"
-			            },
-			            "Object": {
-			              "Role": "fact_market_activity.year_month.quarter"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_quarters"
-			        }
-			      ]
-			    },
-			    "fact_market_activity_year_month_date_hierarchy_has_fact_market_activity_year_month_year": {
-			      "Binding": {
-			        "ConceptualEntity": "factMarketActivities"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "fact_market_activity.year_month.date_hierarchy": {
-			          "Target": {
-			            "Entity": "fact_market_activity.year_month.date_hierarchy"
-			          }
-			        },
-			        "fact_market_activity.year_month.year": {
-			          "Target": {
-			            "Entity": "fact_market_activity.year_month.year"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "fact_market_activity.year_month.date_hierarchy"
-			            },
-			            "Object": {
-			              "Role": "fact_market_activity.year_month.year"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_years"
-			        }
-			      ]
-			    },
-			    "fact_market_activity_year_month_has_date_hierarchy": {
-			      "Binding": {
-			        "ConceptualEntity": "factMarketActivities"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "fact_market_activity.year_month": {
-			          "Target": {
-			            "Entity": "fact_market_activity.year_month"
-			          }
-			        },
-			        "fact_market_activity.year_month.date_hierarchy": {
-			          "Target": {
-			            "Entity": "fact_market_activity.year_month.date_hierarchy"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "fact_market_activity.year_month"
-			            },
-			            "Object": {
-			              "Role": "fact_market_activity.year_month.date_hierarchy"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "year_months_have_year_month_date_hierarchies1"
-			        }
-			      ]
-			    },
-			    "fact_ml_prediction_year_month_date_hierarchy_has_fact_ml_prediction_year_month_day": {
-			      "Binding": {
-			        "ConceptualEntity": "factMlPredictions"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "fact_ml_prediction.year_month.date_hierarchy": {
-			          "Target": {
-			            "Entity": "fact_ml_prediction.year_month.date_hierarchy"
-			          }
-			        },
-			        "fact_ml_prediction.year_month.day": {
-			          "Target": {
-			            "Entity": "fact_ml_prediction.year_month.day"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "fact_ml_prediction.year_month.date_hierarchy"
-			            },
-			            "Object": {
-			              "Role": "fact_ml_prediction.year_month.day"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_days1"
-			        }
-			      ]
-			    },
 			    "fact_ml_prediction_year_month_date_hierarchy_has_fact_ml_prediction_year_month_month": {
 			      "Binding": {
 			        "ConceptualEntity": "factMlPredictions"
@@ -56152,7 +56261,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_months1"
+			          "ID": "year_month_date_hierarchies_have_year_month_months"
 			        }
 			      ]
 			    },
@@ -56185,7 +56294,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_quarters1"
+			          "ID": "year_month_date_hierarchies_have_year_month_quarters"
 			        }
 			      ]
 			    },
@@ -56218,7 +56327,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_years1"
+			          "ID": "year_month_date_hierarchies_have_year_month_years"
 			        }
 			      ]
 			    },
@@ -56251,7 +56360,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_months_have_year_month_date_hierarchies2"
+			          "ID": "year_months_have_year_month_date_hierarchies"
 			        }
 			      ]
 			    },
@@ -56911,7 +57020,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_days2"
+			          "ID": "year_month_date_hierarchies_have_year_month_days"
 			        }
 			      ]
 			    },
@@ -56944,7 +57053,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_months2"
+			          "ID": "year_month_date_hierarchies_have_year_month_months1"
 			        }
 			      ]
 			    },
@@ -56977,7 +57086,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_quarters2"
+			          "ID": "year_month_date_hierarchies_have_year_month_quarters1"
 			        }
 			      ]
 			    },
@@ -57010,7 +57119,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_years2"
+			          "ID": "year_month_date_hierarchies_have_year_month_years1"
 			        }
 			      ]
 			    },
@@ -57043,7 +57152,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_months_have_year_month_date_hierarchies3"
+			          "ID": "year_months_have_year_month_date_hierarchies1"
 			        }
 			      ]
 			    },
@@ -57241,7 +57350,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_days3"
+			          "ID": "year_month_date_hierarchies_have_year_month_days1"
 			        }
 			      ]
 			    },
@@ -57274,7 +57383,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_months3"
+			          "ID": "year_month_date_hierarchies_have_year_month_months2"
 			        }
 			      ]
 			    },
@@ -57307,7 +57416,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_quarters3"
+			          "ID": "year_month_date_hierarchies_have_year_month_quarters2"
 			        }
 			      ]
 			    },
@@ -57340,7 +57449,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_years3"
+			          "ID": "year_month_date_hierarchies_have_year_month_years2"
 			        }
 			      ]
 			    },
@@ -57373,7 +57482,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_months_have_year_month_date_hierarchies4"
+			          "ID": "year_months_have_year_month_date_hierarchies2"
 			        }
 			      ]
 			    },
@@ -57571,7 +57680,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_days4"
+			          "ID": "year_month_date_hierarchies_have_year_month_days2"
 			        }
 			      ]
 			    },
@@ -57604,7 +57713,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_months4"
+			          "ID": "year_month_date_hierarchies_have_year_month_months3"
 			        }
 			      ]
 			    },
@@ -57637,7 +57746,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_quarters4"
+			          "ID": "year_month_date_hierarchies_have_year_month_quarters3"
 			        }
 			      ]
 			    },
@@ -57670,7 +57779,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_month_date_hierarchies_have_year_month_years4"
+			          "ID": "year_month_date_hierarchies_have_year_month_years3"
 			        }
 			      ]
 			    },
@@ -57703,7 +57812,7 @@ cultureInfo en-US
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "year_months_have_year_month_date_hierarchies5"
+			          "ID": "year_months_have_year_month_date_hierarchies3"
 			        }
 			      ]
 			    },
@@ -58829,6 +58938,237 @@ cultureInfo en-US
 			          "State": "Generated",
 			          "Weight": 0.99,
 			          "ID": "dim_products_have_fact_sales"
+			        }
+			      ]
+			    },
+			    "fact_sale_has_entity__measure_product_commercial_snapshot_HTML": {
+			      "Binding": {
+			        "ConceptualEntity": "factSales"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fact_sale": {
+			          "Target": {
+			            "Entity": "fact_sale"
+			          }
+			        },
+			        "entity__measure.product_commercial_snapshot_HTML": {
+			          "Target": {
+			            "Entity": "entity__measure.product_commercial_snapshot_HTML"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "fact_sale"
+			            },
+			            "Object": {
+			              "Role": "entity__measure.product_commercial_snapshot_HTML"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "fact_sales_have_product_commercial_snapshot_HTML"
+			        }
+			      ]
+			    },
+			    "fact_ml_prediction_has_entity__measure_product_commercial_snapshot_HTML": {
+			      "Binding": {
+			        "ConceptualEntity": "factMlPredictions"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fact_ml_prediction": {
+			          "Target": {
+			            "Entity": "fact_ml_prediction"
+			          }
+			        },
+			        "entity__measure.product_commercial_snapshot_HTML": {
+			          "Target": {
+			            "Entity": "entity__measure.product_commercial_snapshot_HTML"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "fact_ml_prediction"
+			            },
+			            "Object": {
+			              "Role": "entity__measure.product_commercial_snapshot_HTML"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "fact_ml_predictions_have_product_commercial_snapshot_HTML"
+			        }
+			      ]
+			    },
+			    "fact_sale_has_entity__measure_product_risk_explanation_HTML": {
+			      "Binding": {
+			        "ConceptualEntity": "factSales"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fact_sale": {
+			          "Target": {
+			            "Entity": "fact_sale"
+			          }
+			        },
+			        "entity__measure.product_risk_explanation_HTML": {
+			          "Target": {
+			            "Entity": "entity__measure.product_risk_explanation_HTML"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "fact_sale"
+			            },
+			            "Object": {
+			              "Role": "entity__measure.product_risk_explanation_HTML"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "fact_sales_have_product_risk_explanation_HTML"
+			        }
+			      ]
+			    },
+			    "fact_ml_prediction_has_entity__measure_product_risk_explanation_HTML": {
+			      "Binding": {
+			        "ConceptualEntity": "factMlPredictions"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fact_ml_prediction": {
+			          "Target": {
+			            "Entity": "fact_ml_prediction"
+			          }
+			        },
+			        "entity__measure.product_risk_explanation_HTML": {
+			          "Target": {
+			            "Entity": "entity__measure.product_risk_explanation_HTML"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "fact_ml_prediction"
+			            },
+			            "Object": {
+			              "Role": "entity__measure.product_risk_explanation_HTML"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "fact_ml_predictions_have_product_risk_explanation_HTML"
+			        }
+			      ]
+			    },
+			    "dim_product_has_entity__measure_product_risk_explanation_HTML": {
+			      "Binding": {
+			        "ConceptualEntity": "dimProduct"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "dim_product": {
+			          "Target": {
+			            "Entity": "dim_product"
+			          }
+			        },
+			        "entity__measure.product_risk_explanation_HTML": {
+			          "Target": {
+			            "Entity": "entity__measure.product_risk_explanation_HTML"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "dim_product"
+			            },
+			            "Object": {
+			              "Role": "entity__measure.product_risk_explanation_HTML"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "dim_products_have_product_risk_explanation_HTML"
+			        }
+			      ]
+			    },
+			    "fact_ml_prediction_has_entity__measure_product_risk_assessment_HTML": {
+			      "Binding": {
+			        "ConceptualEntity": "factMlPredictions"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fact_ml_prediction": {
+			          "Target": {
+			            "Entity": "fact_ml_prediction"
+			          }
+			        },
+			        "entity__measure.product_risk_assessment_HTML": {
+			          "Target": {
+			            "Entity": "entity__measure.product_risk_assessment_HTML"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "fact_ml_prediction"
+			            },
+			            "Object": {
+			              "Role": "entity__measure.product_risk_assessment_HTML"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "fact_ml_predictions_have_product_risk_assessment_HTML"
+			        }
+			      ]
+			    },
+			    "dim_region_has_entity__measure_title_risk_operations": {
+			      "Binding": {
+			        "ConceptualEntity": "dimRegion"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "dim_region": {
+			          "Target": {
+			            "Entity": "dim_region"
+			          }
+			        },
+			        "entity__measure.title_risk_operations": {
+			          "Target": {
+			            "Entity": "entity__measure.title_risk_operations"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "dim_region"
+			            },
+			            "Object": {
+			              "Role": "entity__measure.title_risk_operations"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "dim_regions_have_title_risk_operations"
 			        }
 			      ]
 			    },
@@ -80095,6 +80435,237 @@ cultureInfo en-US
 			          "State": "Generated",
 			          "Weight": 0.99,
 			          "ID": "some_dim_dates_are_weekend_dim_dates"
+			        }
+			      ]
+			    },
+			    "fact_ml_prediction_year_month_date_hierarchy_has_fact_ml_prediction_year_month_day": {
+			      "Binding": {
+			        "ConceptualEntity": "factMlPredictions"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fact_ml_prediction.year_month.date_hierarchy": {
+			          "Target": {
+			            "Entity": "fact_ml_prediction.year_month.date_hierarchy"
+			          }
+			        },
+			        "fact_ml_prediction.year_month.day": {
+			          "Target": {
+			            "Entity": "fact_ml_prediction.year_month.day"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "fact_ml_prediction.year_month.date_hierarchy"
+			            },
+			            "Object": {
+			              "Role": "fact_ml_prediction.year_month.day"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "year_month_date_hierarchies_have_year_month_days3"
+			        }
+			      ]
+			    },
+			    "fact_market_activity_year_month_has_date_hierarchy": {
+			      "Binding": {
+			        "ConceptualEntity": "factMarketActivities"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fact_market_activity.year_month": {
+			          "Target": {
+			            "Entity": "fact_market_activity.year_month"
+			          }
+			        },
+			        "fact_market_activity.year_month.date_hierarchy": {
+			          "Target": {
+			            "Entity": "fact_market_activity.year_month.date_hierarchy"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "fact_market_activity.year_month"
+			            },
+			            "Object": {
+			              "Role": "fact_market_activity.year_month.date_hierarchy"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "year_months_have_year_month_date_hierarchies4"
+			        }
+			      ]
+			    },
+			    "fact_market_activity_year_month_date_hierarchy_has_fact_market_activity_year_month_year": {
+			      "Binding": {
+			        "ConceptualEntity": "factMarketActivities"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fact_market_activity.year_month.date_hierarchy": {
+			          "Target": {
+			            "Entity": "fact_market_activity.year_month.date_hierarchy"
+			          }
+			        },
+			        "fact_market_activity.year_month.year": {
+			          "Target": {
+			            "Entity": "fact_market_activity.year_month.year"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "fact_market_activity.year_month.date_hierarchy"
+			            },
+			            "Object": {
+			              "Role": "fact_market_activity.year_month.year"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "year_month_date_hierarchies_have_year_month_years4"
+			        }
+			      ]
+			    },
+			    "fact_market_activity_year_month_date_hierarchy_has_fact_market_activity_year_month_quarter": {
+			      "Binding": {
+			        "ConceptualEntity": "factMarketActivities"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fact_market_activity.year_month.date_hierarchy": {
+			          "Target": {
+			            "Entity": "fact_market_activity.year_month.date_hierarchy"
+			          }
+			        },
+			        "fact_market_activity.year_month.quarter": {
+			          "Target": {
+			            "Entity": "fact_market_activity.year_month.quarter"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "fact_market_activity.year_month.date_hierarchy"
+			            },
+			            "Object": {
+			              "Role": "fact_market_activity.year_month.quarter"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "year_month_date_hierarchies_have_year_month_quarters4"
+			        }
+			      ]
+			    },
+			    "fact_market_activity_year_month_date_hierarchy_has_fact_market_activity_year_month_month": {
+			      "Binding": {
+			        "ConceptualEntity": "factMarketActivities"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fact_market_activity.year_month.date_hierarchy": {
+			          "Target": {
+			            "Entity": "fact_market_activity.year_month.date_hierarchy"
+			          }
+			        },
+			        "fact_market_activity.year_month.month": {
+			          "Target": {
+			            "Entity": "fact_market_activity.year_month.month"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "fact_market_activity.year_month.date_hierarchy"
+			            },
+			            "Object": {
+			              "Role": "fact_market_activity.year_month.month"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "year_month_date_hierarchies_have_year_month_months4"
+			        }
+			      ]
+			    },
+			    "fact_market_activity_year_month_date_hierarchy_has_fact_market_activity_year_month_day": {
+			      "Binding": {
+			        "ConceptualEntity": "factMarketActivities"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fact_market_activity.year_month.date_hierarchy": {
+			          "Target": {
+			            "Entity": "fact_market_activity.year_month.date_hierarchy"
+			          }
+			        },
+			        "fact_market_activity.year_month.day": {
+			          "Target": {
+			            "Entity": "fact_market_activity.year_month.day"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "fact_market_activity.year_month.date_hierarchy"
+			            },
+			            "Object": {
+			              "Role": "fact_market_activity.year_month.day"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "year_month_date_hierarchies_have_year_month_days4"
+			        }
+			      ]
+			    },
+			    "fact_market_signal_year_month_has_date_hierarchy": {
+			      "Binding": {
+			        "ConceptualEntity": "factMarketSignals"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "fact_market_signal.year_month": {
+			          "Target": {
+			            "Entity": "fact_market_signal.year_month"
+			          }
+			        },
+			        "fact_market_signal.year_month.date_hierarchy": {
+			          "Target": {
+			            "Entity": "fact_market_signal.year_month.date_hierarchy"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "fact_market_signal.year_month"
+			            },
+			            "Object": {
+			              "Role": "fact_market_signal.year_month.date_hierarchy"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "year_months_have_year_month_date_hierarchies5"
 			        }
 			      ]
 			    },

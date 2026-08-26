@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "b486799b91a560bd9020",
   "position": {
     "x": 692.17651458489161,
@@ -63,8 +63,8 @@
                 }
               },
               "queryRef": "_Measures.Customers Active",
-              "nativeQueryRef": "Customers",
-              "displayName": "Customers"
+              "nativeQueryRef": "# Customers",
+              "displayName": "# Customers"
             },
             {
               "field": {
@@ -92,8 +92,8 @@
                 }
               },
               "queryRef": "_Measures.Revenue per Customer",
-              "nativeQueryRef": "Revenue / Customer",
-              "displayName": "Revenue / Customer"
+              "nativeQueryRef": "Revenue per Customer",
+              "displayName": "Revenue per Customer"
             },
             {
               "field": {
@@ -190,7 +190,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "70D"
+                  "Value": "87.10467706013364D"
                 }
               }
             }
@@ -246,7 +246,7 @@
             "value": {
               "expr": {
                 "Literal": {
-                  "Value": "74.68212415856395D"
+                  "Value": "67.04663666456413D"
                 }
               }
             }

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "a5c50ef5d5215b1e53a5",
   "position": {
     "x": 412.62528047868364,
@@ -17,22 +17,17 @@
           "projections": [
             {
               "field": {
-                "HierarchyLevel": {
+                "Column": {
                   "Expression": {
-                    "Hierarchy": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "dimDate"
-                        }
-                      },
-                      "Hierarchy": "Year Hierarchy"
+                    "SourceRef": {
+                      "Entity": "dimDate"
                     }
                   },
-                  "Level": "MonthShortName"
+                  "Property": "MonthYear"
                 }
               },
-              "queryRef": "dimDate.Year Hierarchy.MonthShortName",
-              "nativeQueryRef": "Year Hierarchy MonthShortName",
+              "queryRef": "dimDate.MonthYear",
+              "nativeQueryRef": "MonthYear",
               "active": true
             }
           ]
@@ -238,13 +233,32 @@
                 "color": {
                   "expr": {
                     "ThemeDataColor": {
-                      "ColorId": 7,
-                      "Percent": -0.25
+                      "ColorId": 3,
+                      "Percent": 0
                     }
                   }
                 }
               }
             }
+          }
+        },
+        {
+          "properties": {
+            "fill": {
+              "solid": {
+                "color": {
+                  "expr": {
+                    "ThemeDataColor": {
+                      "ColorId": 1,
+                      "Percent": 0.2
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.Revenue FC Bias"
           }
         }
       ],
@@ -320,7 +334,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'MONTHLY ERROR & BIAS'"
+                  "Value": "'MONTHLY ERROR & BIAS - CURRENT YEAR'"
                 }
               }
             },
