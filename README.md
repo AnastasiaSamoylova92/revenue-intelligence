@@ -103,6 +103,10 @@ revenue-intelligence/
 │
 ├── dashboards/
 │   └── Revenue_Intelligence_Dashboard.pbix
+│   └── Revenue_Intelligence_Dashboard.pbip
+│   └── Revenue_Intelligence_Dashboard.Report
+│   └── Revenue_Intelligence_Dashboard.SemanticModel
+│
 │
 ├── images/
 │   └── executive_overview.png
