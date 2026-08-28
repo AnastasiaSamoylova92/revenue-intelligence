@@ -10,22 +10,6 @@ table factPipeline
 
 		annotation SummarizationSetBy = User
 
-	column created_date
-		dataType: dateTime
-		formatString: Long Date
-		lineageTag: 8a2c142e-3edb-47f3-8088-eed20bc6a692
-		summarizeBy: none
-		sourceColumn: created_date
-
-		variation Variation
-			isDefault
-			relationship: a6321047-bd53-44fc-b413-6be30d90b6f5
-			defaultHierarchy: LocalDateTable_0f9b9aa6-0e86-4ba5-b451-b54d63891f70.'Date Hierarchy'
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation UnderlyingDateTimeDataType = Date
-
 	column customer_id
 		dataType: int64
 		formatString: 0
@@ -142,12 +126,27 @@ table factPipeline
 
 		annotation SummarizationSetBy = Automatic
 
+	column DateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 64fbea3d-9157-45ef-83ed-29528ab276fb
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = Automatic
+
 	partition factPipeline = m
 		mode: import
 		source =
 				let
-				  Source = Sql.Database("localhost", "RevenueAnalytics"),
-				  #"Navigation 1" = Source{[Schema = "staging", Item = "factPipeline"]}[Data]
+				  Source = Sql.Database(pSqlServer, pSqlDatabase),
+				  #"Navigation 1" = Source{[Schema = "staging", Item = "factPipeline"]}[Data],
+				    #"Duplicated Column" = Table.AddColumn(#"Navigation 1", "DateKey", each [created_date_id], Int64.Type),
+				    #"Removed Columns" = Table.RemoveColumns(#"Duplicated Column",{"created_date"})
 				in
-				  #"Navigation 1"
+				  #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
 

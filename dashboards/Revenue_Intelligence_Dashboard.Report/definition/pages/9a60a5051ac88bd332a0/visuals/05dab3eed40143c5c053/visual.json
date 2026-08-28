@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "05dab3eed40143c5c053",
   "position": {
     "x": 599.398998330551,
@@ -73,22 +73,17 @@
           "projections": [
             {
               "field": {
-                "Aggregation": {
+                "Measure": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "factPipeline"
-                        }
-                      },
-                      "Property": "weighted_pipeline_eur"
+                    "SourceRef": {
+                      "Entity": "_Measures"
                     }
                   },
-                  "Function": 0
+                  "Property": "Weighted Pipeline Total"
                 }
               },
-              "queryRef": "Sum(factPipeline.weighted_pipeline_eur)",
-              "nativeQueryRef": "Sum of weighted_pipeline_eur"
+              "queryRef": "_Measures.Weighted Pipeline Total",
+              "nativeQueryRef": "Weighted Pipeline Total"
             }
           ]
         }

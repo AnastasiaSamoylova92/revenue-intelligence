@@ -10,17 +10,6 @@ table factForecast
 
 		annotation SummarizationSetBy = User
 
-	column year_month
-		dataType: dateTime
-		formatString: Long Date
-		lineageTag: 493805f7-24d1-4fc6-9397-1f53cb053f2c
-		summarizeBy: none
-		sourceColumn: year_month
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation UnderlyingDateTimeDataType = Date
-
 	column product_id
 		dataType: int64
 		formatString: 0
@@ -105,12 +94,36 @@ table factForecast
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	column DateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 8d82a8e4-c1bc-4c82-9f76-e48c570939b9
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = User
+
 	partition factForecast = m
 		mode: import
 		source =
 				let
-				  Source = Sql.Database("localhost", "RevenueAnalytics"),
-				  #"Navigation 1" = Source{[Schema = "staging", Item = "factForecast"]}[Data]
+				  Source = Sql.Database(pSqlServer, pSqlDatabase),
+				  #"Navigation 1" = Source{[Schema = "staging", Item = "factForecast"]}[Data],
+				    AddDateKey = Table.AddColumn(
+				        #"Navigation 1",
+				        "DateKey",
+				        each Date.Year([year_month]) * 10000 + Date.Month([year_month]) * 100 + Date.Day([year_month]),
+				        Int64.Type
+				    ),
+				
+				    #"Removed Columns" = Table.RemoveColumns(
+				        AddDateKey,
+				        {"year_month"}
+				    )
 				in
-				  #"Navigation 1"
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
 

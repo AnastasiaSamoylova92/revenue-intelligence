@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "727981576a19b9cb77e3",
   "position": {
     "x": 863.63636363636351,
@@ -108,7 +108,7 @@
                     "Entity": "_Measures"
                   }
                 },
-                "Property": "Revenue YoY"
+                "Property": "Revenue"
               }
             },
             "direction": "Descending"

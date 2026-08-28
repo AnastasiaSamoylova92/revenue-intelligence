@@ -35,7 +35,7 @@
     {
       "source": "bc9d7b990c2080190078",
       "target": "a5c50ef5d5215b1e53a5",
-      "type": "NoFilter"
+      "type": "DataFilter"
     },
     {
       "source": "bc9d7b990c2080190078",

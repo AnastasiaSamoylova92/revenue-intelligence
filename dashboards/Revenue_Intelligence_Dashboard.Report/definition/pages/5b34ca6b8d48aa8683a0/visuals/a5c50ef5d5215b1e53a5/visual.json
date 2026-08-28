@@ -271,6 +271,20 @@
                   "Value": "2D"
                 }
               }
+            },
+            "showMarker": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "markerSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "3D"
+                }
+              }
             }
           }
         }
@@ -299,6 +313,20 @@
                 }
               }
             }
+          }
+        },
+        {
+          "properties": {
+            "labelPrecision": {
+              "expr": {
+                "Literal": {
+                  "Value": "1L"
+                }
+              }
+            }
+          },
+          "selector": {
+            "metadata": "_Measures.Revenue FC Variance"
           }
         }
       ],
@@ -334,7 +362,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'MONTHLY ERROR & BIAS - CURRENT YEAR'"
+                  "Value": "'MONTHLY ERROR & BIAS'"
                 }
               }
             },
@@ -399,8 +427,80 @@
             }
           }
         }
+      ],
+      "spacing": [
+        {
+          "properties": {
+            "spaceAbovePlotArea": {
+              "expr": {
+                "Literal": {
+                  "Value": "5D"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "padding": [
+        {
+          "properties": {
+            "top": {
+              "expr": {
+                "Literal": {
+                  "Value": "5D"
+                }
+              }
+            }
+          }
+        }
       ]
     },
     "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "fb1527034ded7c0c05d5",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Revenue FC Variance"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "4cd50df7627db1015642",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "Revenue FC Bias"
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "c21ecab07d28f870b8a4",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "dimDate"
+              }
+            },
+            "Property": "MonthYear"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
   }
 }

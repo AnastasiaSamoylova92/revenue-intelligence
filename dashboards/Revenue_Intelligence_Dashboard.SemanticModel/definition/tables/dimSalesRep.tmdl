@@ -22,10 +22,10 @@ table dimSalesRep
 		dataType: int64
 		formatString: 0
 		lineageTag: 5c5c14a1-feb1-446c-ae96-fd757e02f5e2
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: region_id
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 	column seniority
 		dataType: string
@@ -49,8 +49,12 @@ table dimSalesRep
 		mode: import
 		source =
 				let
-				  Source = Sql.Database("localhost", "RevenueAnalytics"),
+				  Source = Sql.Database(pSqlServer, pSqlDatabase),
 				  #"Navigation 1" = Source{[Schema = "staging", Item = "dimSalesRep"]}[Data]
 				in
 				  #"Navigation 1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
 

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "746697ea297cb0596167",
   "position": {
     "x": 723.33333333333337,
@@ -50,8 +50,9 @@
                   "Function": 1
                 }
               },
-              "queryRef": "Avg(dimFeatureImportanceFamily.total_importance)",
-              "nativeQueryRef": "Total Importance"
+              "queryRef": "CountNonNull(dimFeatureImportanceFamily.total_importance)",
+              "nativeQueryRef": "Avg Feature Family Importance",
+              "displayName": "Avg Feature Family Importance"
             }
           ]
         }
@@ -150,7 +151,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'TOTAL IMPORTANCE BY FEATURE FAMILY'"
+                  "Value": "'IMPORTANCE BY FEATURE FAMILY'"
                 }
               }
             },

@@ -1,22 +1,6 @@
 table factMarketActivities
 	lineageTag: e80946be-b4ed-494a-9d2b-4867123366ce
 
-	column year_month
-		dataType: dateTime
-		formatString: Long Date
-		lineageTag: 53fe2f61-2ab6-4357-8102-0332dcd9a971
-		summarizeBy: none
-		sourceColumn: year_month
-
-		variation Variation
-			isDefault
-			relationship: 4cb69169-5d3c-4fa7-ab3c-e6bacbb67bff
-			defaultHierarchy: LocalDateTable_f131a635-8d78-49f8-b2ae-95b12bc923e7.'Date Hierarchy'
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation UnderlyingDateTimeDataType = Date
-
 	column region_id
 		dataType: int64
 		formatString: 0
@@ -156,14 +140,37 @@ table factMarketActivities
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	column DateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 926549e5-4afd-411e-8fe6-f03afb084017
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = User
+
 	partition factMarketActivities = m
 		mode: import
 		source =
 				let
-				  Source = Sql.Database("localhost", "RevenueAnalytics"),
-				  #"Navigation 1" = Source{[Schema = "staging", Item = "factMarketActivities"]}[Data]
+				    Source = Sql.Database("localhost", "RevenueAnalytics"),
+				    #"Navigation 1" = Source{[Schema = "staging", Item = "factMarketActivities"]}[Data],
+				
+				    #"Added DateKey" = Table.AddColumn(
+				        #"Navigation 1",
+				        "DateKey",
+				        each Number.FromText(
+				            Date.ToText(Date.From([year_month]), "yyyyMMdd")
+				        ),
+				        Int64.Type
+				    ),
+				
+				    #"Removed Columns" = Table.RemoveColumns(
+				        #"Added DateKey",
+				        {"year_month"}
+				    )
 				in
-				  #"Navigation 1"
+				    #"Removed Columns"
 
 	annotation PBI_NavigationStepName = Navigation
 

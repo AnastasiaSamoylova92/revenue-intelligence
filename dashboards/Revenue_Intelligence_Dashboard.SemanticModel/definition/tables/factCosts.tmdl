@@ -10,22 +10,6 @@ table factCosts
 
 		annotation SummarizationSetBy = User
 
-	column year_month
-		dataType: dateTime
-		formatString: Long Date
-		lineageTag: 8bbce5c2-b26b-401c-8f53-28da4edd5d65
-		summarizeBy: none
-		sourceColumn: year_month
-
-		variation Variation
-			isDefault
-			relationship: a47d44c8-2fa3-4b0e-a699-5f8d9ba49d22
-			defaultHierarchy: LocalDateTable_9c48b623-33d8-4708-8356-14915caa4649.'Date Hierarchy'
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation UnderlyingDateTimeDataType = Date
-
 	column product_id
 		dataType: int64
 		formatString: 0
@@ -75,12 +59,37 @@ table factCosts
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
+	column DateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 1b10331e-ffd4-4824-9dd1-c6b899a13189
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = User
+
 	partition factCosts = m
 		mode: import
 		source =
 				let
-				  Source = Sql.Database("localhost", "RevenueAnalytics"),
-				  #"Navigation 1" = Source{[Schema = "staging", Item = "factCosts"]}[Data]
+				    Source = Sql.Database(pSqlServer, pSqlDatabase),
+				    FactCosts = Source{[Schema = "staging", Item = "factCosts"]}[Data],
+				
+				    AddDateKey = Table.AddColumn(
+				        FactCosts,
+				        "DateKey",
+				        each Date.Year([year_month]) * 10000 + Date.Month([year_month]) * 100 + Date.Day([year_month]),
+				        Int64.Type
+				    ),
+				
+				    #"Removed Columns" = Table.RemoveColumns(
+				        AddDateKey,
+				        {"year_month"}
+				    )
 				in
-				  #"Navigation 1"
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
 

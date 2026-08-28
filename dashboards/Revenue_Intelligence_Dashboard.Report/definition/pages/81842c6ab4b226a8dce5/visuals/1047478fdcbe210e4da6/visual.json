@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "1047478fdcbe210e4da6",
   "position": {
     "x": 143.33333333333334,
@@ -17,17 +17,22 @@
           "projections": [
             {
               "field": {
-                "Column": {
+                "HierarchyLevel": {
                   "Expression": {
-                    "SourceRef": {
-                      "Entity": "dimDate"
+                    "Hierarchy": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "dimDate"
+                        }
+                      },
+                      "Hierarchy": "Year Hierarchy"
                     }
                   },
-                  "Property": "Date"
+                  "Level": "MonthShortName"
                 }
               },
-              "queryRef": "dimDate.Date",
-              "nativeQueryRef": "Date",
+              "queryRef": "dimDate.Year Hierarchy.MonthShortName",
+              "nativeQueryRef": "Year Hierarchy MonthShortName",
               "active": true
             }
           ]
@@ -50,24 +55,6 @@
             }
           ]
         }
-      },
-      "sortDefinition": {
-        "sort": [
-          {
-            "field": {
-              "Column": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "dimDate"
-                  }
-                },
-                "Property": "Date"
-              }
-            },
-            "direction": "Ascending"
-          }
-        ],
-        "isDefaultSort": true
       }
     },
     "objects": {
@@ -429,7 +416,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'CUSTOMER TREND'"
+                  "Value": "'ACTIVE CUSTOMERS TREND'"
                 }
               }
             },

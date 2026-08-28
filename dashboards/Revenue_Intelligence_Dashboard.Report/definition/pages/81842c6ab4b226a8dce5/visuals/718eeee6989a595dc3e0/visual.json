@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "718eeee6989a595dc3e0",
   "position": {
     "x": 577.75075987841944,
@@ -28,11 +28,11 @@
                       "Hierarchy": "Year Hierarchy"
                     }
                   },
-                  "Level": "Date"
+                  "Level": "MonthShortName"
                 }
               },
-              "queryRef": "dimDate.Year Hierarchy.Date",
-              "nativeQueryRef": "Year Hierarchy Date",
+              "queryRef": "dimDate.Year Hierarchy.MonthShortName",
+              "nativeQueryRef": "Year Hierarchy MonthShortName",
               "active": true
             }
           ]
@@ -55,29 +55,6 @@
             }
           ]
         }
-      },
-      "sortDefinition": {
-        "sort": [
-          {
-            "field": {
-              "HierarchyLevel": {
-                "Expression": {
-                  "Hierarchy": {
-                    "Expression": {
-                      "SourceRef": {
-                        "Entity": "dimDate"
-                      }
-                    },
-                    "Hierarchy": "Year Hierarchy"
-                  }
-                },
-                "Level": "Date"
-              }
-            },
-            "direction": "Ascending"
-          }
-        ],
-        "isDefaultSort": true
       }
     },
     "objects": {

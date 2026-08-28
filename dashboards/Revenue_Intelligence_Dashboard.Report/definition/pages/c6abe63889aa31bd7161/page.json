@@ -9,7 +9,7 @@
     {
       "source": "080090282e104de4b0ec",
       "target": "eb9f84f4d58520577275",
-      "type": "NoFilter"
+      "type": "DataFilter"
     }
   ]
 }

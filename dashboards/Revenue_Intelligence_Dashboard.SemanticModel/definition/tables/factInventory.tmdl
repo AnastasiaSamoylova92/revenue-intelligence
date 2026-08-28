@@ -5,26 +5,10 @@ table factInventory
 		dataType: int64
 		formatString: 0
 		lineageTag: 45b613d1-f069-4221-b7f8-82e0e9c4b8f9
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: inventory_id
 
 		annotation SummarizationSetBy = Automatic
-
-	column year_month
-		dataType: dateTime
-		formatString: Long Date
-		lineageTag: a2df3dd1-4d65-4430-804c-de27398cfc5c
-		summarizeBy: none
-		sourceColumn: year_month
-
-		variation Variation
-			isDefault
-			relationship: 9653cc7e-c108-474e-a4f1-9f2a98634853
-			defaultHierarchy: LocalDateTable_2c387bf5-6ab8-4189-b2c0-04415a869e94.'Date Hierarchy'
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation UnderlyingDateTimeDataType = Date
 
 	column product_id
 		dataType: int64
@@ -99,12 +83,36 @@ table factInventory
 
 		annotation SummarizationSetBy = Automatic
 
+	column DateKey
+		dataType: int64
+		formatString: 0
+		lineageTag: 101c2fa2-6de6-4450-980d-b19227f398f6
+		summarizeBy: none
+		sourceColumn: DateKey
+
+		annotation SummarizationSetBy = User
+
 	partition factInventory = m
 		mode: import
 		source =
 				let
-				  Source = Sql.Database("localhost", "RevenueAnalytics"),
-				  #"Navigation 1" = Source{[Schema = "staging", Item = "factInventory"]}[Data]
+				  Source = Sql.Database(pSqlServer, pSqlDatabase),
+				  #"Navigation 1" = Source{[Schema = "staging", Item = "factInventory"]}[Data],
+				    AddDateKey = Table.AddColumn(
+				        #"Navigation 1",
+				        "DateKey",
+				        each Date.Year([year_month]) * 10000 + Date.Month([year_month]) * 100 + Date.Day([year_month]),
+				        Int64.Type
+				    ),
+				
+				    #"Removed Columns" = Table.RemoveColumns(
+				        AddDateKey,
+				        {"year_month"}
+				    )
 				in
-				  #"Navigation 1"
+				    #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
 

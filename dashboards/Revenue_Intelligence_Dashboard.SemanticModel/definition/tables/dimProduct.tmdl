@@ -120,8 +120,12 @@ table dimProduct
 		mode: import
 		source =
 				let
-				  Source = Sql.Database("localhost", "RevenueAnalytics"),
+				  Source = Sql.Database(pSqlServer, pSqlDatabase),
 				  #"Navigation 1" = Source{[Schema = "staging", Item = "dimProduct"]}[Data]
 				in
 				  #"Navigation 1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
 

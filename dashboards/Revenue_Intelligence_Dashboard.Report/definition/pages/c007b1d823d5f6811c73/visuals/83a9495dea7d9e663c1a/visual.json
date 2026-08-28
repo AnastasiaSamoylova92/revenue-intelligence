@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "83a9495dea7d9e663c1a",
   "position": {
     "x": 574.5454545454545,
@@ -26,8 +26,8 @@
                   "Property": "Revenue Health Score"
                 }
               },
-              "queryRef": "_Measures.Revenue Score",
-              "nativeQueryRef": "Revenue                   ",
+              "queryRef": "_Measures.Revenue Health Score",
+              "nativeQueryRef": "Revenue Health Score",
               "displayName": "Revenue                   "
             },
             {
@@ -41,8 +41,8 @@
                   "Property": "Margin Health Score"
                 }
               },
-              "queryRef": "_Measures.Margin Score",
-              "nativeQueryRef": "Margin ",
+              "queryRef": "_Measures.Margin Health Score",
+              "nativeQueryRef": "Margin Health Score",
               "displayName": "Margin "
             },
             {
@@ -71,8 +71,8 @@
                   "Property": "Forecast Health Score"
                 }
               },
-              "queryRef": "_Measures.Forecast Score",
-              "nativeQueryRef": "Forecast",
+              "queryRef": "_Measures.Forecast Health Score",
+              "nativeQueryRef": "Forecast Health Score",
               "displayName": "Forecast"
             },
             {
@@ -306,7 +306,7 @@
                 }
               }
             ],
-            "metadata": "_Measures.Forecast Score"
+            "metadata": "_Measures.Forecast Health Score"
           }
         },
         {
@@ -498,7 +498,7 @@
                 }
               }
             ],
-            "metadata": "_Measures.Margin Score"
+            "metadata": "_Measures.Margin Health Score"
           }
         },
         {
@@ -690,7 +690,7 @@
                 }
               }
             ],
-            "metadata": "_Measures.Revenue Score"
+            "metadata": "_Measures.Revenue Health Score"
           }
         },
         {
@@ -1135,7 +1135,7 @@
             }
           },
           "selector": {
-            "metadata": "_Measures.Revenue Score"
+            "metadata": "_Measures.Revenue Health Score"
           }
         }
       ]

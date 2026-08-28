@@ -22,7 +22,7 @@ table dimFeatureImportance
 		dataType: int64
 		formatString: 0
 		lineageTag: f4f42ffe-4151-4f6d-8068-ba4c99be4690
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: rank
 
 		annotation SummarizationSetBy = Automatic
@@ -49,7 +49,13 @@ table dimFeatureImportance
 		mode: import
 		source =
 				let
-				  Source = Csv.Document(File.Contents("C:\Benutzer\Anastasia\Lokale Daten\AS Portfolio\early-warning\data\full_data\ml_interpretation_risk_output\risk_output_feature_importance.csv"), [Delimiter = ",", Columns = 5, QuoteStyle = QuoteStyle.None]),
+				  Source = Csv.Document(
+				          File.Contents(
+				              pEarlyWarningRoot
+				                  & "\data\full_data\ml_interpretation_risk_output\risk_output_feature_importance.csv"
+				          ),
+				          [Delimiter = ",", Columns = 5, QuoteStyle = QuoteStyle.None]
+				      ),
 				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"rank", Int64.Type}, {"feature", type text}, {"importance", type number}, {"cumulative_importance", type number}, {"feature_family", type text}}, "en-US")
 				in

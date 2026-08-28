@@ -14,7 +14,7 @@
     {
       "source": "c7269af9d53055051ee1",
       "target": "34d32e6c1458c4865daa",
-      "type": "NoFilter"
+      "type": "DataFilter"
     },
     {
       "source": "c7269af9d53055051ee1",

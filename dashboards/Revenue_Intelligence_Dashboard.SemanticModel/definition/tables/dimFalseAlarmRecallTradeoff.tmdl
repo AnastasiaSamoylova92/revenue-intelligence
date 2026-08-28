@@ -44,19 +44,19 @@ table dimFalseAlarmRecallTradeoff
 		dataType: double
 		formatString: 0.00\ %;-0.00\ %;0.00\ %
 		lineageTag: 8c563ce6-d275-44ec-b0ee-50d69764e109
-		summarizeBy: sum
+		summarizeBy: average
 		sourceColumn: high_risk_recall
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 	column high_risk_precision
 		dataType: double
 		formatString: 0.00\ %;-0.00\ %;0.00\ %
 		lineageTag: 8ac39064-770a-4af2-9b69-778fb55dc5cf
-		summarizeBy: sum
+		summarizeBy: average
 		sourceColumn: high_risk_precision
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 	column false_alarm_rate
 		dataType: double
@@ -125,20 +125,20 @@ table dimFalseAlarmRecallTradeoff
 	column high_risk_f2
 		dataType: double
 		lineageTag: e0774074-c925-46c3-b93f-f1b65c1be62b
-		summarizeBy: sum
+		summarizeBy: average
 		sourceColumn: high_risk_f2
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column high_risk_alert_rate
 		dataType: double
 		lineageTag: 7db42929-fe16-4939-aae1-5a6d852239ac
-		summarizeBy: sum
+		summarizeBy: average
 		sourceColumn: high_risk_alert_rate
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
@@ -230,14 +230,22 @@ table dimFalseAlarmRecallTradeoff
 
 	partition dimFalseAlarmRecallTradeoff = m
 		mode: import
-		source =
+		source = ```
 				let
-				  Source = Csv.Document(File.Contents("C:\Benutzer\Anastasia\AS Portfolio\early-warning\data\full_data\ml_interpretation_risk_output\false_alarm_recall_tradeoff.csv"), [Delimiter = ",", Columns = 24, QuoteStyle = QuoteStyle.None]),
+				  Source = 
+				      Csv.Document(
+				          File.Contents(
+				              pEarlyWarningRoot
+				                  & "\data\full_data\ml_interpretation_risk_output\false_alarm_recall_tradeoff.csv"
+				          ),
+				          [Delimiter = ",", Columns = 24, QuoteStyle = QuoteStyle.None]
+				      ),
 				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"model", type text}, {"split", type text}, {"decision_rule", type text}, {"threshold", type number}, {"accuracy", type number}, {"balanced_accuracy", type number}, {"macro_f1", type number}, {"weighted_f1", type number}, {"high_risk_recall", type number}, {"high_risk_precision", type number}, {"high_risk_f1", type number}, {"high_risk_f2", type number}, {"false_alarm_rate", type number}, {"alert_rate", type number}, {"high_risk_alert_rate", type number}, {"high_risk_tp", Int64.Type}, {"high_risk_fp", Int64.Type}, {"high_risk_fn", Int64.Type}, {"high_risk_tn", Int64.Type}, {"macro_roc_auc_ovr", type number}, {"macro_pr_auc", type number}, {"high_risk_pr_auc", type number}, {"log_loss", type number}, {"any_risk_alert_rate", type number}}, "en-US"),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Changed column type",{{"threshold", Percentage.Type}, {"accuracy", Percentage.Type}, {"balanced_accuracy", Percentage.Type}, {"macro_f1", Percentage.Type}, {"weighted_f1", Percentage.Type}, {"high_risk_recall", Percentage.Type}, {"high_risk_precision", Percentage.Type}, {"high_risk_f1", Percentage.Type}, {"high_risk_f2", Percentage.Type}, {"false_alarm_rate", Percentage.Type}, {"alert_rate", Percentage.Type}, {"high_risk_alert_rate", Percentage.Type}, {"macro_roc_auc_ovr", Percentage.Type}, {"macro_pr_auc", Percentage.Type}, {"high_risk_pr_auc", Percentage.Type}, {"log_loss", Percentage.Type}, {"any_risk_alert_rate", Percentage.Type}})
 				in
 				  #"Changed Type"
+				```
 
 	annotation PBI_NavigationStepName = Navigation
 

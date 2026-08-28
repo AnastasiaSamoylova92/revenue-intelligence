@@ -17,22 +17,17 @@
           "projections": [
             {
               "field": {
-                "HierarchyLevel": {
+                "Column": {
                   "Expression": {
-                    "Hierarchy": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "dimDate"
-                        }
-                      },
-                      "Hierarchy": "Year Hierarchy"
+                    "SourceRef": {
+                      "Entity": "dimDate"
                     }
                   },
-                  "Level": "MonthShortName"
+                  "Property": "MonthYear"
                 }
               },
-              "queryRef": "dimDate.Year Hierarchy.MonthShortName",
-              "nativeQueryRef": "Year Hierarchy MonthShortName",
+              "queryRef": "dimDate.MonthYear",
+              "nativeQueryRef": "MonthYear",
               "active": true
             }
           ]
@@ -320,6 +315,20 @@
               "expr": {
                 "Literal": {
                   "Value": "2D"
+                }
+              }
+            },
+            "showMarker": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "markerSize": {
+              "expr": {
+                "Literal": {
+                  "Value": "3D"
                 }
               }
             }

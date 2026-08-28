@@ -39,7 +39,14 @@ table dimFeatureImportanceFamily
 		mode: import
 		source =
 				let
-				  Source = Csv.Document(File.Contents("C:\Benutzer\Anastasia\Lokale Daten\AS Portfolio\early-warning\data\full_data\ml_interpretation_risk_output\risk_output_feature_family_importance.csv"), [Delimiter = ",", Columns = 4, QuoteStyle = QuoteStyle.None]),
+				  Source = Csv.Document(
+				          File.Contents(
+				              pEarlyWarningRoot
+				                  &
+				                  "\data\full_data\ml_interpretation_risk_output\risk_output_feature_family_importance.csv"
+				          ),
+				          [Delimiter = ",", Columns = 4, QuoteStyle = QuoteStyle.None]
+				      ),
 				  #"Promoted headers" = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),
 				  #"Changed column type" = Table.TransformColumnTypes(#"Promoted headers", {{"feature_family", type text}, {"total_importance", type number}, {"feature_count", Int64.Type}, {"top_feature", type text}}, "en-US"),
 				    #"Changed Type" = Table.TransformColumnTypes(#"Changed column type",{{"total_importance", Percentage.Type}})

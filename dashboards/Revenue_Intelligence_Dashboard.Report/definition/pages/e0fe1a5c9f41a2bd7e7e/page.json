@@ -24,7 +24,7 @@
     {
       "source": "c4a6dee8bb16c985ced9",
       "target": "f6ea655e469f9da8e53f",
-      "type": "NoFilter"
+      "type": "DataFilter"
     }
   ]
 }

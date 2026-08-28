@@ -93,13 +93,25 @@ table _Measures
 		displayFolder: 00 Core Measures
 		lineageTag: 8aa0d346-afb0-4c9b-84de-c539c04d9ab7
 
-	measure 'Revenue FC' = SUM(factForecast[forecast_revenue_eur])
-		formatString: #,0\ "€";-#,0\ "€";#,0\ "€"
+	measure 'Revenue FC' =
+			
+			VAR SelectedVersion = [Selected Forecast Version]
+			RETURN
+			    CALCULATE(
+			        SUM(factForecast[forecast_revenue_eur]),
+			        REMOVEFILTERS(factForecast[forecast_version]),
+			        FILTER(
+			            ALL(factForecast[forecast_version]),
+			            factForecast[forecast_version] = SelectedVersion
+			        )
+			    )
 		displayFolder: 03 Forecasting
 		lineageTag: f3fa7971-be8f-43ae-b96d-bfd355aa3226
 
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	measure 'Revenue FC Variance' = [Revenue] - [Revenue FC]
-		formatString: #,0\ "€";-#,0\ "€";#,0\ "€"
+		formatString: #,0.0\ "€";-#,0.0\ "€";#,0.0\ "€"
 		displayFolder: 03 Forecasting
 		lineageTag: 9897ba7e-e95c-40bd-a179-516949277445
 
@@ -115,7 +127,14 @@ table _Measures
 		lineageTag: 0e0b7508-be4e-4459-b30c-5ef7c9f10f96
 
 	measure 'Revenue FC Accuracy %' = ```
-			1 - ABS([Revenue FC Variance %]) 
+			
+			  VAR VariancePct = [Revenue FC Variance %]
+			  RETURN
+			      IF(
+			          ISBLANK(VariancePct),
+			          BLANK(),
+			          MAX(0, 1 - ABS(VariancePct))
+			      )
 			```
 		formatString: 0.0\ %;-0.0\ %;0.0\ %
 		displayFolder: 03 Forecasting
@@ -696,13 +715,6 @@ table _Measures
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-DE"}
 
-	measure 'PVM Other Effect Margin' = [Gross Profit YoY] - [PVM Cost Effect] - [PVM Margin Mix Effect] - [PVM Price Effect] - [PVM Volume Effect]
-		formatString: #,0.###############\ "€";-#,0.###############\ "€";#,0.###############\ "€"
-		displayFolder: 02 Margin
-		lineageTag: cb794a08-a854-4934-93e7-fac719acaf54
-
-		annotation PBI_FormatHint = {"currencyCulture":"en-DE"}
-
 	measure 'Discount % avg' = AVERAGE(factSales[discount_pct])
 		formatString: 0.0\ %;-0.0\ %;0.0\ %
 		displayFolder: 00 Core Measures
@@ -984,15 +996,33 @@ table _Measures
 
 		annotation PBI_FormatHint = {"currencyCulture":"en-DE"}
 
-	measure 'Revenue per Customer YoY % with Arrow' =
+	measure 'Revenue per Customer YoY % with Arrow' = ```
 			
-			VAR uparrow = UNICHAR(129129)
-			VAR downarrow = UNICHAR(129131)
-			VAR gap = DIVIDE([Revenue per Customer], [Revenue per Customer PY])
-			RETURN
-			IF(gap < 0,
-			downarrow &" "&FORMAT(ROUND(gap,1), "#.###")&"% vs PY",
-			uparrow &" "&FORMAT(ROUND(gap,1), "#.###")&"% vs PY")
+			  VAR UpArrow = UNICHAR ( 129129 )
+			  VAR DownArrow = UNICHAR ( 129131 )
+			  VAR YoYChange =
+			      DIVIDE (
+			          [Revenue per Customer],
+			          [Revenue per Customer PY]
+			      ) - 1
+			  VAR YoYChangePct = YoYChange * 100
+			  RETURN
+			      IF (
+			          ISBLANK ( YoYChange ),
+			          BLANK (),
+			          IF (
+			              YoYChange < 0,
+			              DownArrow
+			                  & " "
+			                  & FORMAT ( ROUND ( YoYChangePct, 1 ), "0.0" )
+			                  & "% vs PY",
+			              UpArrow
+			                  & " "
+			                  & FORMAT ( ROUND ( YoYChangePct, 1 ), "0.0" )
+			                  & "% vs PY"
+			          )
+			      )
+			```
 		displayFolder: 04 Customers
 		lineageTag: 70afc0b7-7fb8-4661-85f3-613a729d7572
 
@@ -1098,7 +1128,10 @@ table _Measures
 		displayFolder: 04 Customers
 		lineageTag: 34849c41-dfbe-478c-b67f-f00c1e554541
 
-	measure 'NRR %' = DIVIDE([Customers Retained Revenue], CALCULATE([Customers Retained Revenue], SAMEPERIODLASTYEAR(dimDate[Date])))
+	measure 'NRR %' =
+			DIVIDE (
+			      [NRR Ending Revenue],
+			      [NRR Starting Revenue])
 		formatString: 0.0\ %;-0.0\ %;0.0\ %
 		displayFolder: 00 Core Measures
 		lineageTag: 70262c18-803d-4ab6-b579-d2e72e60023c
@@ -1200,10 +1233,9 @@ table _Measures
 		lineageTag: 365aa386-2061-4046-97af-f28dd9ef8a6b
 
 	measure 'Revenue FC Bias' = [Revenue FC] - [Revenue]
+		formatString: #,0.0\ "€";-#,0.0\ "€";#,0.0\ "€"
 		displayFolder: 03 Forecasting
 		lineageTag: ac2f04d0-f848-4001-b5bd-38d4fe9c1985
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Units FC' = SUM(factForecast[forecast_units])
 		formatString: 0
@@ -1228,10 +1260,9 @@ table _Measures
 			    [Units] - [Units FC]
 			RETURN
 			UnitsDiff * [ASP FC]
+		formatString: #,0.0\ "€";-#,0.0\ "€";#,0.0\ "€"
 		displayFolder: 03 Forecasting
 		lineageTag: 6f50bb5f-0f50-412e-867a-d0f99db3f780
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'FC Price Variance' =
 			
@@ -1239,16 +1270,14 @@ table _Measures
 			    [ASP] - [ASP FC]
 			RETURN
 			ASPDiff * [Units FC]
+		formatString: 0.0
 		displayFolder: 03 Forecasting
 		lineageTag: 5d7660b0-9845-4dff-8481-cc2f251e26f1
 
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
-
 	measure 'FC Other Variance' = [Revenue FC Variance] - [FC Volume Variance] - [FC Price Variance]
+		formatString: #,0.0\ "€";-#,0.0\ "€";#,0.0\ "€"
 		displayFolder: 03 Forecasting
 		lineageTag: 74e6fbb0-2ee5-4ee3-8715-a86f670aab06
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'FC Variance Drivers Waterfall Value' = ```
 			
@@ -1266,10 +1295,9 @@ table _Measures
 			)
 			
 			```
+		formatString: #,0.0\ "€";-#,0.0\ "€";#,0.0\ "€"
 		displayFolder: 03 Forecasting
 		lineageTag: ac33e293-5b82-49a3-b9eb-cfe62357cda7
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'FC Largest Driver' =
 			
@@ -1614,7 +1642,21 @@ table _Measures
 		displayFolder: 02 Margin
 		lineageTag: 970b56a1-c1f9-48bf-a615-eac2638fa1a9
 
-	measure 'NRR Health Score' = MIN(100, MAX(0, DIVIDE([NRR %], 1.10)))
+	measure 'NRR Health Score' =
+			
+			VAR NRRValue = [NRR %]
+			  RETURN
+			      IF (
+			          ISBLANK ( NRRValue ),
+			          BLANK (),
+			          MIN (
+			              1,
+			              MAX (
+			                  0,
+			                  DIVIDE ( NRRValue, 1.10 )
+			              )
+			          )
+			      )
 		formatString: 0.0\ %;-0.0\ %;0.0\ %
 		displayFolder: 04 Customers
 		lineageTag: 13dd6318-bbd1-4f6c-b343-3a45c631285e
@@ -1840,79 +1882,177 @@ table _Measures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'True Positives' =
+	measure 'True Positives' = ```
 			
-			CALCULATE (
-			    [Risk Records],
-			    KEEPFILTERS ( factMlPredictions[actual_risk_label_num] = 2 ),
-			    KEEPFILTERS ( factMlPredictions[predicted_risk_label_num] = 2 )
-			)
+			  VAR LabeledRows = [Evaluation Records]
+			  RETURN
+			      IF (
+			          ISBLANK ( LabeledRows ),
+			          BLANK (),
+			          CALCULATE (
+			              COUNTROWS ( factMlPredictions ),
+			              KEEPFILTERS (
+			                  FILTER (
+			                      factMlPredictions,
+			                      NOT ISBLANK ( factMlPredictions[actual_risk_label_num] )
+			                          && factMlPredictions[actual_risk_label_num] = 2
+			                          && factMlPredictions[predicted_risk_label_num] = 2
+			                  )
+			              )
+			          )
+			      )
+			```
 		formatString: 0
 		displayFolder: 06 Model Performance
 		lineageTag: ad6079e8-ccc4-43c3-844a-8c9bb2da0033
 
-	measure 'False Positives' =
+	measure 'False Positives' = ```
 			
-			SUM ( factMlPredictions[is_false_alarm] )
+			  VAR LabeledRows = [Evaluation Records]
+			  RETURN
+			      IF (
+			          ISBLANK ( LabeledRows ),
+			          BLANK (),
+			          CALCULATE (
+			              COUNTROWS ( factMlPredictions ),
+			              KEEPFILTERS (
+			                  FILTER (
+			                      factMlPredictions,
+			                      NOT ISBLANK ( factMlPredictions[actual_risk_label_num] )
+			                          && factMlPredictions[actual_risk_label_num] <> 2
+			                          && factMlPredictions[predicted_risk_label_num] = 2
+			                  )
+			              )
+			          )
+			      )
+			```
 		formatString: 0
 		displayFolder: 06 Model Performance
 		lineageTag: aa2e769a-a4e9-4074-a85e-65a7bce69bd6
 
-	measure 'False Negatives' =
+	measure 'False Negatives' = ```
 			
-			SUM ( factMlPredictions[is_missed_high_risk] )
+			  VAR LabeledRows = [Evaluation Records]
+			  RETURN
+			      IF (
+			          ISBLANK ( LabeledRows ),
+			          BLANK (),
+			          CALCULATE (
+			              COUNTROWS ( factMlPredictions ),
+			              KEEPFILTERS (
+			                  FILTER (
+			                      factMlPredictions,
+			                      NOT ISBLANK ( factMlPredictions[actual_risk_label_num] )
+			                          && factMlPredictions[actual_risk_label_num] = 2
+			                          && factMlPredictions[predicted_risk_label_num] <> 2
+			                  )
+			              )
+			          )
+			      )
+			```
 		formatString: 0
 		displayFolder: 06 Model Performance
 		lineageTag: 37a26540-f046-42c5-bcfa-3b62d3236d2e
 
-	measure 'True Negatives' =
+	measure 'True Negatives' = ```
 			
-			[Risk Records] - [True Positives] - [False Positives] - [False Negatives]
+			  VAR LabeledRows = [Evaluation Records]
+			  VAR TP = [True Positives]
+			  VAR FP = [False Positives]
+			  VAR FN_ = [False Negatives]
+			  RETURN
+			      IF (
+			          ISBLANK ( LabeledRows ),
+			          BLANK (),
+			          LabeledRows - TP - FP - FN_
+			      )
+			
+			```
 		formatString: 0
 		displayFolder: 06 Model Performance
 		lineageTag: d066871a-9bfb-4b58-b64a-467655aa82ee
 
-	measure 'High Risk Precision' =
+	measure 'High Risk Precision' = ```
 			
-			DIVIDE ( [True Positives], [True Positives] + [False Positives] )
+			  VAR TP = [True Positives]
+			  VAR FP = [False Positives]
+			  RETURN
+			      IF (
+			          ISBLANK ( [Evaluation Records] ),
+			          BLANK (),
+			          DIVIDE ( TP, TP + FP )
+			      )
+			```
 		displayFolder: 01 Risk
 		lineageTag: 975c2ba5-61d5-44c6-ba57-1148c98be522
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'High Risk Recall' =
+	measure 'High Risk Recall' = ```
 			
-			DIVIDE ( [True Positives], [True Positives] + [False Negatives] )
+			  VAR TP = [True Positives]
+			  VAR FN_ = [False Negatives]
+			  RETURN
+			      IF (
+			          ISBLANK ( [Evaluation Records] ),
+			          BLANK (),
+			          DIVIDE ( TP, TP + FN_ )
+			      )
+			```
 		displayFolder: 01 Risk
 		lineageTag: f0f072ea-e0a3-49bf-8605-0b471bc736d7
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'False Alarm Rate' =
+	measure 'False Alarm Rate' = ```
 			
-			DIVIDE ( [False Positives], [False Positives] + [True Negatives] )
+			  VAR FP = [False Positives]
+			  VAR TN = [True Negatives]
+			  RETURN
+			      IF (
+			          ISBLANK ( [Evaluation Records] ),
+			          BLANK (),
+			          DIVIDE ( FP, FP + TN )
+			      )
+			```
 		displayFolder: 06 Model Performance
 		lineageTag: 2b87dcd5-cd85-4f53-a9b9-4c76807fb3a5
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'Correct Predictions' =
+	measure 'Correct Predictions' = ```
 			
-			CALCULATE (
-			    [Risk Records],
-			    FILTER (
-			        factMlPredictions,
-			        factMlPredictions[actual_risk_label_num]
-			            = factMlPredictions[predicted_risk_label_num]
-			    )
-			)
+			  VAR LabeledRows = [Evaluation Records]
+			  RETURN
+			      IF (
+			          ISBLANK ( LabeledRows ),
+			          BLANK (),
+			          CALCULATE (
+			              COUNTROWS ( factMlPredictions ),
+			              KEEPFILTERS (
+			                  FILTER (
+			                      factMlPredictions,
+			                      NOT ISBLANK ( factMlPredictions[actual_risk_label_num] )
+			                          && factMlPredictions[actual_risk_label_num]
+			                              = factMlPredictions[predicted_risk_label_num]
+			                  )
+			              )
+			          )
+			      )
+			```
 		formatString: 0
 		displayFolder: 06 Model Performance
 		lineageTag: e920496a-5684-425f-8ccd-0a7b88b61e6a
 
 	measure 'Model Accuracy' =
 			
-			DIVIDE ( [Correct Predictions], [Risk Records] )
+			VAR LabeledRows = [Evaluation Records]
+			RETURN
+			      IF (
+			          ISBLANK ( LabeledRows ),
+			          BLANK (),
+			          DIVIDE ( [Correct Predictions], LabeledRows )
+			      )
 		displayFolder: 06 Model Performance
 		lineageTag: 80ce4e7e-a223-4829-b177-1760384664a7
 
@@ -7132,68 +7272,8 @@ table _Measures
 			        _PreviousPreviousCustomerRows
 			    )
 			
-			
-			-- NRR: current revenue from the PY customer cohort
-			VAR _CurrentRevenueFromPreviousCustomers =
-			    CALCULATE (
-			        SUM ( factSales[revenue_eur] ),
-			        KEEPFILTERS (
-			            TREATAS (
-			                _PreviousCustomers,
-			                factSales[customer_id]
-			            )
-			        )
-			    )
-			
-			VAR _PreviousRevenueFromPreviousCustomers =
-			    CALCULATE (
-			        SUM ( factSales[revenue_eur] ),
-			        DATEADD ( dimDate[Date], -1, YEAR ),
-			        KEEPFILTERS (
-			            TREATAS (
-			                _PreviousCustomers,
-			                factSales[customer_id]
-			            )
-			        )
-			    )
-			
-			VAR _NRRCurrent =
-			    DIVIDE (
-			        _CurrentRevenueFromPreviousCustomers,
-			        _PreviousRevenueFromPreviousCustomers
-			    )
-			
-			
-			-- Previous NRR: PY revenue from the two-year-prior cohort
-			VAR _PreviousRevenueFromPreviousPreviousCustomers =
-			    CALCULATE (
-			        SUM ( factSales[revenue_eur] ),
-			        DATEADD ( dimDate[Date], -1, YEAR ),
-			        KEEPFILTERS (
-			            TREATAS (
-			                _PreviousPreviousCustomers,
-			                factSales[customer_id]
-			            )
-			        )
-			    )
-			
-			VAR _PreviousPreviousRevenue =
-			    CALCULATE (
-			        SUM ( factSales[revenue_eur] ),
-			        DATEADD ( dimDate[Date], -2, YEAR ),
-			        KEEPFILTERS (
-			            TREATAS (
-			                _PreviousPreviousCustomers,
-			                factSales[customer_id]
-			            )
-			        )
-			    )
-			
-			VAR _NRRPrevious =
-			    DIVIDE (
-			        _PreviousRevenueFromPreviousPreviousCustomers,
-			        _PreviousPreviousRevenue
-			    )
+			VAR _NRRCurrent = [NRR %]
+			VAR _NRRPrevious = [NRR % PY]
 			
 			
 			-- Year-over-year changes
@@ -8124,11 +8204,7 @@ table _Measures
 			VAR _RevenueCurrent =
 			    SUM ( factSales[revenue_eur] )
 			
-			VAR _RevenuePrevious =
-			    CALCULATE (
-			        SUM ( factSales[revenue_eur] ),
-			        DATEADD ( dimDate[Date], -1, YEAR )
-			    )
+			VAR _RevenuePrevious = [Revenue PY]
 			
 			
 			-- Units
@@ -8155,70 +8231,8 @@ table _Measures
 			        _ActiveCustomersPrevious
 			    )
 			
-			
-			-- Current NRR
-			-- Revenue generated by the PY customer cohort
-			VAR _CurrentRevenueFromPreviousCustomers =
-			    CALCULATE (
-			        SUM ( factSales[revenue_eur] ),
-			        KEEPFILTERS (
-			            TREATAS (
-			                _PreviousCustomers,
-			                factSales[customer_id]
-			            )
-			        )
-			    )
-			
-			VAR _PreviousRevenueFromPreviousCustomers =
-			    CALCULATE (
-			        SUM ( factSales[revenue_eur] ),
-			        DATEADD ( dimDate[Date], -1, YEAR ),
-			        KEEPFILTERS (
-			            TREATAS (
-			                _PreviousCustomers,
-			                factSales[customer_id]
-			            )
-			        )
-			    )
-			
-			VAR _NRRCurrent =
-			    DIVIDE (
-			        _CurrentRevenueFromPreviousCustomers,
-			        _PreviousRevenueFromPreviousCustomers
-			    )
-			
-			
-			-- PY NRR
-			-- PY revenue generated by the two-year-prior cohort
-			VAR _PreviousRevenueFromPreviousPreviousCustomers =
-			    CALCULATE (
-			        SUM ( factSales[revenue_eur] ),
-			        DATEADD ( dimDate[Date], -1, YEAR ),
-			        KEEPFILTERS (
-			            TREATAS (
-			                _PreviousPreviousCustomers,
-			                factSales[customer_id]
-			            )
-			        )
-			    )
-			
-			VAR _PreviousPreviousRevenue =
-			    CALCULATE (
-			        SUM ( factSales[revenue_eur] ),
-			        DATEADD ( dimDate[Date], -2, YEAR ),
-			        KEEPFILTERS (
-			            TREATAS (
-			                _PreviousPreviousCustomers,
-			                factSales[customer_id]
-			            )
-			        )
-			    )
-			
-			VAR _NRRPrevious =
-			    DIVIDE (
-			        _PreviousRevenueFromPreviousPreviousCustomers,
-			        _PreviousPreviousRevenue
-			    )
+			VAR _NRRCurrent = [NRR %]
+			VAR _NRRPrevious = [NRR % PY]
 			
 			
 			-- PY changes
@@ -9411,7 +9425,7 @@ table _Measures
 			
 			-- Not currently available as a table in the semantic model
 			VAR _PreprocessedRows =
-			    78816
+			    120000
 			
 			VAR _FeatureDatasetRows =
 			    CALCULATE (
@@ -10286,9 +10300,8 @@ table _Measures
 			        [SplitCount]
 			    ) <= 1
 			
-			-- Check 7: Pipeline metadata currently reports a warning
 			VAR _ReconciliationWarning =
-			    TRUE ()
+			    FALSE ()
 			
 			-- Summary counts
 			VAR _PassedCount =
@@ -10543,9 +10556,9 @@ table _Measures
 			        <div class='qa-row'>
 			            <div class='qa-check'>Row-count reconciliation</div>
 			            <div class='qa-result'
-			                 style='color:#D97706'>
-			                <span class='qa-warning-icon'>!</span>
-			                Warning
+			                 style='color:#2F855A'>
+			                <span class='qa-icon'>!</span>
+			                Passed
 			            </div>
 			        </div>
 			
@@ -12291,10 +12304,9 @@ table _Measures
 		lineageTag: 159e62ed-167b-42eb-affe-e2b3e0ee2cb8
 
 	measure 'Risk Score normalized AVG' = AVERAGE(factMlPredictions[risk_score_normalized])
+		formatString: 0.0
 		displayFolder: 00 Core Measures
 		lineageTag: 35de2532-856b-4fba-9c80-4cc09cbe6f3c
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'High-Risk Probability AVG' = AVERAGE(factMlPredictions[high_risk_probability])
 		displayFolder: 01 Risk
@@ -16894,402 +16906,6 @@ table _Measures
 		displayFolder: 02 Margin
 		lineageTag: 8c4d807a-59c8-4050-9988-6fdb689e4c5e
 
-	measure 'Executive KPI Cards HTML v2' =
-			
-			VAR _Revenue =
-			    [Revenue]
-			
-			VAR _GrossProfit =
-			    [Gross Profit]
-			
-			VAR _GrossMargin =
-			    [Gross Margin %]
-			
-			VAR _ForecastAccuracy =
-			    [Revenue FC Accuracy %]
-			
-			VAR _NRR =
-			    [NRR %]
-			
-			VAR _RevenueAtRisk =
-			    [Revenue at Risk]
-			
-			VAR _RevenueAtRiskShare =
-			    [Revenue at Risk % of Total]
-			
-			
-			-- Comparisons
-			VAR _RevenueDelta =
-			    [Revenue YoY %]
-			
-			VAR _GrossProfitDelta =
-			    [Gross Profit % YoY]
-			
-			VAR _GrossMarginDeltaPp =
-			    [Gross Margin % YoY pp]
-			
-			VAR _ForecastAccuracyDeltaPp =
-			    (
-			        [Revenue FC Accuracy %]
-			            - [Revenue FC Accuracy % PY]
-			    ) * 100
-			
-			VAR _NRRDeltaPp =
-			    [NRR YoY % pp]
-			
-			
-			-- KPI formatting
-			VAR _RevenueFormatted =
-			    SWITCH (
-			        TRUE (),
-			        ISBLANK ( _Revenue ), "—",
-			        ABS ( _Revenue ) >= 1000000000,
-			            FORMAT ( _Revenue / 1000000000, "€0.00bn" ),
-			        ABS ( _Revenue ) >= 1000000,
-			            FORMAT ( _Revenue / 1000000, "€0.0m" ),
-			        ABS ( _Revenue ) >= 1000,
-			            FORMAT ( _Revenue / 1000, "€0.0k" ),
-			        FORMAT ( _Revenue, "€#,0" )
-			    )
-			
-			VAR _GrossProfitFormatted =
-			    SWITCH (
-			        TRUE (),
-			        ISBLANK ( _GrossProfit ), "—",
-			        ABS ( _GrossProfit ) >= 1000000000,
-			            FORMAT ( _GrossProfit / 1000000000, "€0.00bn" ),
-			        ABS ( _GrossProfit ) >= 1000000,
-			            FORMAT ( _GrossProfit / 1000000, "€0.0m" ),
-			        ABS ( _GrossProfit ) >= 1000,
-			            FORMAT ( _GrossProfit / 1000, "€0.0k" ),
-			        FORMAT ( _GrossProfit, "€#,0" )
-			    )
-			
-			VAR _GrossMarginFormatted =
-			    IF (
-			        ISBLANK ( _GrossMargin ),
-			        "—",
-			        FORMAT ( _GrossMargin, "0.0%" )
-			    )
-			
-			VAR _ForecastAccuracyFormatted =
-			    IF (
-			        ISBLANK ( _ForecastAccuracy ),
-			        "—",
-			        FORMAT ( _ForecastAccuracy, "0.0%" )
-			    )
-			
-			VAR _NRRFormatted =
-			    IF (
-			        ISBLANK ( _NRR ),
-			        "—",
-			        FORMAT ( _NRR, "0.0%" )
-			    )
-			
-			VAR _RevenueAtRiskFormatted =
-			    SWITCH (
-			        TRUE (),
-			        ISBLANK ( _RevenueAtRisk ), "—",
-			        ABS ( _RevenueAtRisk ) >= 1000000000,
-			            FORMAT ( _RevenueAtRisk / 1000000000, "€0.00bn" ),
-			        ABS ( _RevenueAtRisk ) >= 1000000,
-			            FORMAT ( _RevenueAtRisk / 1000000, "€0.0m" ),
-			        ABS ( _RevenueAtRisk ) >= 1000,
-			            FORMAT ( _RevenueAtRisk / 1000, "€0.0k" ),
-			        FORMAT ( _RevenueAtRisk, "€#,0" )
-			    )
-			
-			
-			-- Comparison text
-			VAR _RevenueDeltaText =
-			    IF (
-			        ISBLANK ( _RevenueDelta ),
-			        "—",
-			        SWITCH (
-			            TRUE (),
-			            _RevenueDelta > 0, "▲ ",
-			            _RevenueDelta < 0, "▼ ",
-			            "— "
-			        )
-			            & FORMAT ( ABS ( _RevenueDelta ), "0.0%" )
-			            & " vs PY"
-			    )
-			
-			VAR _GrossProfitDeltaText =
-			    IF (
-			        ISBLANK ( _GrossProfitDelta ),
-			        "—",
-			        SWITCH (
-			            TRUE (),
-			            _GrossProfitDelta > 0, "▲ ",
-			            _GrossProfitDelta < 0, "▼ ",
-			            "— "
-			        )
-			            & FORMAT ( ABS ( _GrossProfitDelta ), "0.0%" )
-			    )
-			
-			VAR _GrossMarginDeltaText =
-			    IF (
-			        ISBLANK ( _GrossMarginDeltaPp ),
-			        "—",
-			        SWITCH (
-			            TRUE (),
-			            _GrossMarginDeltaPp > 0, "▲ ",
-			            _GrossMarginDeltaPp < 0, "▼ ",
-			            "— "
-			        )
-			            & FORMAT ( ABS ( _GrossMarginDeltaPp ), "0.0" )
-			            & " pp"
-			    )
-			
-			VAR _ForecastAccuracyDeltaText =
-			    IF (
-			        ISBLANK ( _ForecastAccuracyDeltaPp ),
-			        "—",
-			        SWITCH (
-			            TRUE (),
-			            _ForecastAccuracyDeltaPp > 0, "▲ ",
-			            _ForecastAccuracyDeltaPp < 0, "▼ ",
-			            "— "
-			        )
-			            & FORMAT ( ABS ( _ForecastAccuracyDeltaPp ), "0.0" )
-			            & " pp"
-			    )
-			
-			VAR _NRRDeltaText =
-			    IF (
-			        ISBLANK ( _NRRDeltaPp ),
-			        "—",
-			        SWITCH (
-			            TRUE (),
-			            _NRRDeltaPp > 0, "▲ ",
-			            _NRRDeltaPp < 0, "▼ ",
-			            "— "
-			        )
-			            & FORMAT ( ABS ( _NRRDeltaPp ), "0.0" )
-			            & " pp"
-			    )
-			
-			VAR _RevenueAtRiskText =
-			    IF (
-			        ISBLANK ( _RevenueAtRiskShare ),
-			        "—",
-			        "• " & FORMAT ( _RevenueAtRiskShare, "0.0%" )
-			    )
-			
-			
-			-- Semantic colors
-			VAR _RevenueDeltaColor =
-			    SWITCH (
-			        TRUE (),
-			        ISBLANK ( _RevenueDelta ), "#7A7480",
-			        _RevenueDelta > 0, "#2F855A",
-			        _RevenueDelta < 0, "#C53D3D",
-			        "#7A7480"
-			    )
-			
-			VAR _GrossProfitDeltaColor =
-			    SWITCH (
-			        TRUE (),
-			        ISBLANK ( _GrossProfitDelta ), "#7A7480",
-			        _GrossProfitDelta > 0, "#2F855A",
-			        _GrossProfitDelta < 0, "#C53D3D",
-			        "#7A7480"
-			    )
-			
-			VAR _GrossMarginDeltaColor =
-			    SWITCH (
-			        TRUE (),
-			        ISBLANK ( _GrossMarginDeltaPp ), "#7A7480",
-			        _GrossMarginDeltaPp > 0, "#2F855A",
-			        _GrossMarginDeltaPp < 0, "#C53D3D",
-			        "#7A7480"
-			    )
-			
-			VAR _ForecastAccuracyDeltaColor =
-			    SWITCH (
-			        TRUE (),
-			        ISBLANK ( _ForecastAccuracyDeltaPp ), "#7A7480",
-			        _ForecastAccuracyDeltaPp > 0, "#2F855A",
-			        _ForecastAccuracyDeltaPp < 0, "#C53D3D",
-			        "#7A7480"
-			    )
-			
-			VAR _NRRDeltaColor =
-			    SWITCH (
-			        TRUE (),
-			        ISBLANK ( _NRRDeltaPp ), "#7A7480",
-			        _NRRDeltaPp > 0, "#2F855A",
-			        _NRRDeltaPp < 0, "#C53D3D",
-			        "#7A7480"
-			    )
-			
-			RETURN
-			    "
-			    <style>
-			        * {
-			            box-sizing: border-box;
-			        }
-			
-			        .ek-grid {
-			            width: 100%;
-			            height: 100%;
-			            display: grid;
-			            grid-template-columns: repeat(6, minmax(135px, 1fr));
-			            gap: 12px;
-			            padding: 2px;
-			            font-family: 'Segoe UI', Arial, sans-serif;
-			        }
-			
-			        .ek-card {
-			            min-width: 0;
-			            min-height: 104px;
-			            display: grid;
-			            grid-template-columns: 54px minmax(0, 1fr);
-			            align-items: center;
-			            column-gap: 12px;
-			            padding: 14px 13px;
-			            overflow: hidden;
-			            background: #FFFFFF;
-			            border: 1px solid #E3DEE6;
-			            border-radius: 10px;
-			            box-shadow: 0 2px 5px rgba(51,16,69,.06);
-			        }
-			
-			        .ek-icon {
-			            width: 50px;
-			            height: 50px;
-			            display: flex;
-			            align-items: center;
-			            justify-content: center;
-			            border-radius: 50%;
-			            color: #FFFFFF;
-			            font-size: 27px;
-			            line-height: 1;
-			            font-weight: 500;
-			            font-family: 'Segoe UI Symbol','Segoe UI',sans-serif;
-			        }
-			
-			        .ek-content {
-			            min-width: 0;
-			            overflow: hidden;
-			        }
-			
-			        .ek-label {
-			            margin-bottom: 4px;
-			            overflow: hidden;
-			            color: #4E4851;
-			            font-size: 11px;
-			            line-height: 1.2;
-			            font-weight: 500;
-			            white-space: nowrap;
-			            text-overflow: ellipsis;
-			        }
-			
-			        .ek-value {
-			            margin-bottom: 7px;
-			            overflow: hidden;
-			            color: #171318;
-			            font-size: clamp(20px, 1.8vw, 27px);
-			            line-height: 1;
-			            font-weight: 700;
-			            letter-spacing: -.025em;
-			            white-space: nowrap;
-			            text-overflow: ellipsis;
-			        }
-			
-			        .ek-delta {
-			            overflow: hidden;
-			            font-size: 10px;
-			            line-height: 1.2;
-			            font-weight: 700;
-			            white-space: nowrap;
-			            text-overflow: ellipsis;
-			        }
-			    </style>
-			
-			    <div class='ek-grid'>
-			
-			        <div class='ek-card'>
-			            <div class='ek-icon' style='background:#331045'>€</div>
-			            <div class='ek-content'>
-			                <div class='ek-label'>Revenue</div>
-			                <div class='ek-value'>" & _RevenueFormatted & "</div>
-			                <div class='ek-delta'
-			                     style='color:" & _RevenueDeltaColor & "'>
-			                    " & _RevenueDeltaText & "
-			                </div>
-			            </div>
-			        </div>
-			
-			        <div class='ek-card'>
-			            <div class='ek-icon'
-			                 style='background:#6F4A7C;font-size:24px'>▥</div>
-			            <div class='ek-content'>
-			                <div class='ek-label'>Gross Profit</div>
-			                <div class='ek-value'>" & _GrossProfitFormatted & "</div>
-			                <div class='ek-delta'
-			                     style='color:" & _GrossProfitDeltaColor & "'>
-			                    " & _GrossProfitDeltaText & "
-			                </div>
-			            </div>
-			        </div>
-			
-			        <div class='ek-card'>
-			            <div class='ek-icon' style='background:#6F4A7C'>%</div>
-			            <div class='ek-content'>
-			                <div class='ek-label'>Gross Margin</div>
-			                <div class='ek-value'>" & _GrossMarginFormatted & "</div>
-			                <div class='ek-delta'
-			                     style='color:" & _GrossMarginDeltaColor & "'>
-			                    " & _GrossMarginDeltaText & "
-			                </div>
-			            </div>
-			        </div>
-			
-			        <div class='ek-card'>
-			            <div class='ek-icon'
-			                 style='background:#4E98AA;font-size:31px'>◎</div>
-			            <div class='ek-content'>
-			                <div class='ek-label'>Forecast Accuracy</div>
-			                <div class='ek-value'>" & _ForecastAccuracyFormatted & "</div>
-			                <div class='ek-delta'
-			                     style='color:" & _ForecastAccuracyDeltaColor & "'>
-			                    " & _ForecastAccuracyDeltaText & "
-			                </div>
-			            </div>
-			        </div>
-			
-			        <div class='ek-card'>
-			            <div class='ek-icon'
-			                 style='background:#D99A2B;font-size:31px'>↻</div>
-			            <div class='ek-content'>
-			                <div class='ek-label'>NRR</div>
-			                <div class='ek-value'>" & _NRRFormatted & "</div>
-			                <div class='ek-delta'
-			                     style='color:" & _NRRDeltaColor & "'>
-			                    " & _NRRDeltaText & "
-			                </div>
-			            </div>
-			        </div>
-			
-			        <div class='ek-card'>
-			            <div class='ek-icon'
-			                 style='background:#C53D3D;font-size:28px'>!</div>
-			            <div class='ek-content'>
-			                <div class='ek-label'>Revenue at Risk</div>
-			                <div class='ek-value'>" & _RevenueAtRiskFormatted & "</div>
-			                <div class='ek-delta' style='color:#C53D3D'>
-			                    " & _RevenueAtRiskText & "
-			                </div>
-			            </div>
-			        </div>
-			
-			    </div>
-			    "
-		displayFolder: 08 Executive
-		lineageTag: 3661dd96-243f-4215-8e4a-3bd1267b19ea
-
 	measure 'Executive Revenue PY Forecast HTML' =
 			
 			VAR _LatestForecastVersion =
@@ -17307,14 +16923,14 @@ table _Measures
 			-- Last available actual-sales month
 			VAR _LastActualMonth =
 			    CALCULATE (
-			        MAX ( factSales[year_month] )
+			        MAX ( dimDate[MonthStartDate] )
 			    )
 			
 			
 			-- Last available Latest Estimate month
 			VAR _LastForecastMonth =
 			    CALCULATE (
-			        MAX ( factForecast[year_month] ),
+			        MAX ( dimDate[MonthStartDate] ),
 			        factForecast[forecast_version] = _LatestForecastVersion
 			    )
 			
@@ -17370,12 +16986,12 @@ table _Measures
 			-- Last actual month in the selected reporting year
 			VAR _LastActualMonthInYear =
 			    CALCULATE (
-			        MAX ( factSales[year_month] ),
+			        MAX ( dimDate[MonthStartDate] ),
 			        REMOVEFILTERS ( dimDate ),
 			        FILTER (
-			            ALL ( factSales[year_month] ),
-			            factSales[year_month] >= _YearStart
-			                && factSales[year_month] < _NextYearStart
+			            ALL ( dimDate[MonthStartDate] ),
+			            dimDate[MonthStartDate] >= _YearStart
+			                && dimDate[MonthStartDate] < _NextYearStart
 			        )
 			    )
 			
@@ -17424,9 +17040,9 @@ table _Measures
 			                    [Revenue],
 			                    REMOVEFILTERS ( dimDate ),
 			                    FILTER (
-			                        ALL ( factSales[year_month] ),
-			                        factSales[year_month] >= _Month
-			                            && factSales[year_month] < _NextMonth
+			                        ALL ( dimDate[MonthStartDate] ),
+			                        dimDate[MonthStartDate] >= _Month
+			                            && dimDate[MonthStartDate] < _NextMonth
 			                    )
 			                ),
 			
@@ -17445,9 +17061,9 @@ table _Measures
 			                    [Revenue],
 			                    REMOVEFILTERS ( dimDate ),
 			                    FILTER (
-			                        ALL ( factSales[year_month] ),
-			                        factSales[year_month] >= _Month
-			                            && factSales[year_month] < _NextMonth
+			                        ALL ( dimDate[MonthStartDate] ),
+			                        dimDate[MonthStartDate] >= _Month
+			                            && dimDate[MonthStartDate] < _NextMonth
 			                    )
 			                ),
 			
@@ -17470,9 +17086,9 @@ table _Measures
 			                    factForecast[forecast_version]
 			                        = _LatestForecastVersion,
 			                    FILTER (
-			                        ALL ( factForecast[year_month] ),
-			                        factForecast[year_month] >= _Month
-			                            && factForecast[year_month] < _NextMonth
+			                        ALL ( dimDate[MonthStartDate] ),
+			                        dimDate[MonthStartDate] >= _Month
+			                            && dimDate[MonthStartDate] < _NextMonth
 			                    )
 			                )
 			    )
@@ -19682,7 +19298,7 @@ table _Measures
 			                CALCULATETABLE (
 			                    SUMMARIZE (
 			                        factCosts,
-			                        factCosts[year_month],
+			                        dimDate[Date],
 			                        factCosts[product_id],
 			                        "@VariancePerUnit",
 			                            MAX (
@@ -19696,7 +19312,7 @@ table _Measures
 			                    _CostPairs,
 			
 			                    VAR _Month =
-			                        factCosts[year_month]
+			                        dimDate[Date]
 			
 			                    VAR _Product =
 			                        factCosts[product_id]
@@ -19713,7 +19329,7 @@ table _Measures
 			                            REMOVEFILTERS ( dimDate ),
 			                            TREATAS (
 			                                { _Month },
-			                                factSales[year_month]
+			                                dimDate[Date]
 			                            ),
 			                            TREATAS (
 			                                { _Product },
@@ -20145,31 +19761,42 @@ table _Measures
 			
 			
 			-- Last selected month from the date slicer
-			VAR _SelectedEndMonth =
-			    MAXX (
+			VAR _SelectedEndMonth = MAXX (
 			        ALLSELECTED ( dimDate[MonthStartDate] ),
 			        dimDate[MonthStartDate]
 			    )
 			
-			
 			-- Last available actual-sales month
 			VAR _LastSalesMonth =
-			    CALCULATE (
-			        MAX ( factSales[year_month] ),
-			        REMOVEFILTERS ( dimDate )
+			    MAXX (
+			        FILTER (
+			            ALLSELECTED ( dimDate[MonthStartDate] ),
+			            NOT ISBLANK (
+			                CALCULATE ( [Revenue] )
+			            )
+			        ),
+			        dimDate[MonthStartDate]
 			    )
-			
 			
 			-- Last available forecast month
 			VAR _LastForecastMonth =
-			    CALCULATE (
-			        MAX ( factForecast[year_month] ),
-			        REMOVEFILTERS ( dimDate ),
-			        REMOVEFILTERS (
-			            factForecast[forecast_version]
-			        )
-			    )
+			    MAXX (
+			        FILTER (
+			            ALLSELECTED ( dimDate[MonthStartDate] ),
 			
+			            VAR _ForecastValue =
+			                CALCULATE (
+			                    [Revenue FC],
+			                    REMOVEFILTERS (
+			                        factForecast[forecast_version]
+			                    )
+			                )
+			
+			            RETURN
+			                NOT ISBLANK ( _ForecastValue )
+			        ),
+			        dimDate[MonthStartDate]
+			    )
 			
 			-- Last available month across actual and forecast data
 			VAR _LastDataMonth =
@@ -20180,15 +19807,11 @@ table _Measures
 			
 			
 			-- Keep the chart within the available data range
-			VAR _EndMonth =
-			    IF (
+			VAR _EndMonth = IF (
 			        ISBLANK ( _LastDataMonth ),
 			        BLANK (),
 			        MIN (
-			            COALESCE (
-			                _SelectedEndMonth,
-			                _LastDataMonth
-			            ),
+			            _SelectedEndMonth,
 			            _LastDataMonth
 			        )
 			    )
@@ -20217,39 +19840,56 @@ table _Measures
 			
 			
 			-- Rolling twelve-month table
-			VAR _Months =
-			    SELECTCOLUMNS (
-			        GENERATESERIES ( 0, 11, 1 ),
-			        "@MonthNumber",
-			            [Value] + 1,
-			        "@MonthDate",
-			            EDATE (
-			                _StartMonth,
-			                [Value]
-			            )
+			VAR _SelectedMonths =
+			    CALCULATETABLE (
+			        VALUES ( dimDate[MonthStartDate] ),
+			        ALLSELECTED ( dimDate[MonthStartDate] )
 			    )
 			
 			
+			VAR _LastTwelveSelectedMonths =
+			    TOPN (
+			        12,
+			        _SelectedMonths,
+			        dimDate[MonthStartDate],
+			        DESC
+			    )
+			
+			
+			VAR _Months =
+			    SELECTCOLUMNS (
+			        ADDCOLUMNS (
+			            _LastTwelveSelectedMonths,
+			
+			            "@MonthNumber",
+			                RANKX (
+			                    _LastTwelveSelectedMonths,
+			                    dimDate[MonthStartDate],
+			                    ,
+			                    ASC,
+			                    DENSE
+			                )
+			        ),
+			
+			        "@MonthNumber", [@MonthNumber],
+			        "@MonthDate", dimDate[MonthStartDate]
+			    )
+			
 			-- Monthly actual and forecast-version values
 			VAR _ChartData =
-			    ADDCOLUMNS (
-			        _Months,
-			
+			    ADDCOLUMNS (_Months,
 			        "@Actual",
 			            VAR _Month =
 			                [@MonthDate]
 			
-			            VAR _NextMonth =
-			                EDATE ( _Month, 1 )
-			
 			            RETURN
 			                CALCULATE (
 			                    [Revenue],
-			                    REMOVEFILTERS ( dimDate ),
-			                    FILTER (
-			                        ALL ( factSales[year_month] ),
-			                        factSales[year_month] >= _Month
-			                            && factSales[year_month] < _NextMonth
+			                    KEEPFILTERS (
+			                        TREATAS (
+			                            { _Month },
+			                            dimDate[MonthStartDate]
+			                        )
 			                    )
 			                ),
 			
@@ -20257,24 +19897,24 @@ table _Measures
 			            VAR _Month =
 			                [@MonthDate]
 			
-			            VAR _NextMonth =
-			                EDATE ( _Month, 1 )
-			
 			            RETURN
 			                CALCULATE (
 			                    [Revenue FC],
-			                    REMOVEFILTERS ( dimDate ),
+			
 			                    REMOVEFILTERS (
 			                        factForecast[forecast_version]
 			                    ),
+			
 			                    TREATAS (
 			                        { _BudgetVersion },
 			                        factForecast[forecast_version]
 			                    ),
-			                    FILTER (
-			                        ALL ( factForecast[year_month] ),
-			                        factForecast[year_month] >= _Month
-			                            && factForecast[year_month] < _NextMonth
+			
+			                    KEEPFILTERS (
+			                        TREATAS (
+			                            { _Month },
+			                            dimDate[MonthStartDate]
+			                        )
 			                    )
 			                ),
 			
@@ -20297,9 +19937,9 @@ table _Measures
 			                        factForecast[forecast_version]
 			                    ),
 			                    FILTER (
-			                        ALL ( factForecast[year_month] ),
-			                        factForecast[year_month] >= _Month
-			                            && factForecast[year_month] < _NextMonth
+			                        ALL ( dimDate[MonthStartDate] ),
+			                        dimDate[MonthStartDate] >= _Month
+			                            && dimDate[MonthStartDate] < _NextMonth
 			                    )
 			                ),
 			
@@ -20322,9 +19962,9 @@ table _Measures
 			                        factForecast[forecast_version]
 			                    ),
 			                    FILTER (
-			                        ALL ( factForecast[year_month] ),
-			                        factForecast[year_month] >= _Month
-			                            && factForecast[year_month] < _NextMonth
+			                        ALL ( dimDate[MonthStartDate] ),
+			                        dimDate[MonthStartDate] >= _Month
+			                            && dimDate[MonthStartDate] < _NextMonth
 			                    )
 			                )
 			    )
@@ -21580,1093 +21220,6 @@ table _Measures
 		displayFolder: 03 Forecasting
 		lineageTag: 94acd190-9784-4360-87cb-777efc97f86d
 
-	measure 'Revenue Outlook & Coverage HTML' =
-			
-			VAR _BudgetVersion = "Budget"
-			VAR _LatestVersion = "Latest Estimate"
-			
-			VAR _LastActualMonth =
-			    CALCULATE (
-			        MAX ( factSales[year_month] ),
-			        REMOVEFILTERS ( dimDate )
-			    )
-			
-			VAR _FirstOutlookMonth =
-			    EDATE ( _LastActualMonth, 1 )
-			
-			VAR _Months =
-			    SELECTCOLUMNS (
-			        GENERATESERIES ( 0, 5, 1 ),
-			        "@Index", [Value],
-			        "@Month", EDATE ( _FirstOutlookMonth, [Value] )
-			    )
-			
-			VAR _BaseData =
-			    ADDCOLUMNS (
-			        _Months,
-			        "@Target",
-			            VAR _Month = [@Month]
-			            VAR _NextMonth = EDATE ( _Month, 1 )
-			            RETURN
-			                CALCULATE (
-			                    [Revenue FC],
-			                    REMOVEFILTERS ( dimDate ),
-			                    REMOVEFILTERS ( factForecast[forecast_version] ),
-			                    FILTER (
-			                        ALL ( factForecast[year_month] ),
-			                        factForecast[year_month] >= _Month
-			                            && factForecast[year_month] < _NextMonth
-			                    ),
-			                    factForecast[forecast_version] = _BudgetVersion
-			                ),
-			        "@Latest",
-			            VAR _Month = [@Month]
-			            VAR _NextMonth = EDATE ( _Month, 1 )
-			            RETURN
-			                CALCULATE (
-			                    [Revenue FC],
-			                    REMOVEFILTERS ( dimDate ),
-			                    REMOVEFILTERS ( factForecast[forecast_version] ),
-			                    FILTER (
-			                        ALL ( factForecast[year_month] ),
-			                        factForecast[year_month] >= _Month
-			                            && factForecast[year_month] < _NextMonth
-			                    ),
-			                    factForecast[forecast_version] = _LatestVersion
-			                ),
-			        "@WeightedPipeline",
-			            VAR _Month = [@Month]
-			            VAR _NextMonth = EDATE ( _Month, 1 )
-			            RETURN
-			                CALCULATE (
-			                    SUM ( factPipeline[weighted_pipeline_eur] ),
-			                    REMOVEFILTERS ( dimDate ),
-			                    FILTER (
-			                        ALL ( factPipeline[expected_close_date] ),
-			                        factPipeline[expected_close_date] >= _Month
-			                            && factPipeline[expected_close_date] < _NextMonth
-			                    ),
-			                    factPipeline[is_closed_won] = 0,
-			                    factPipeline[is_closed_lost] = 0
-			                ),
-			        "@OpenPipeline",
-			            VAR _Month = [@Month]
-			            VAR _NextMonth = EDATE ( _Month, 1 )
-			            RETURN
-			                CALCULATE (
-			                    SUM ( factPipeline[expected_value_eur] ),
-			                    REMOVEFILTERS ( dimDate ),
-			                    FILTER (
-			                        ALL ( factPipeline[expected_close_date] ),
-			                        factPipeline[expected_close_date] >= _Month
-			                            && factPipeline[expected_close_date] < _NextMonth
-			                    ),
-			                    factPipeline[is_closed_won] = 0,
-			                    factPipeline[is_closed_lost] = 0
-			                )
-			    )
-			
-			VAR _ChartData =
-			    ADDCOLUMNS (
-			        _BaseData,
-			        "@StackTotal", COALESCE ( [@Latest], 0 ) + COALESCE ( [@WeightedPipeline], 0 ),
-			        "@Gap", MAX ( 0, COALESCE ( [@Target], 0 ) - COALESCE ( [@Latest], 0 ) ),
-			        "@Coverage",
-			            VAR _Gap = MAX ( 0, COALESCE ( [@Target], 0 ) - COALESCE ( [@Latest], 0 ) )
-			            RETURN
-			                IF ( _Gap > 0, DIVIDE ( [@OpenPipeline], _Gap ) )
-			    )
-			
-			VAR _HasData =
-			    COUNTROWS (
-			        FILTER (
-			            _ChartData,
-			            NOT ISBLANK ( [@Target] )
-			                || NOT ISBLANK ( [@Latest] )
-			                || NOT ISBLANK ( [@WeightedPipeline] )
-			        )
-			    ) > 0
-			
-			VAR _RawRevenueMaximum =
-			    MAXX (
-			        _ChartData,
-			        MAX ( COALESCE ( [@Target], 0 ), COALESCE ( [@StackTotal], 0 ) )
-			    )
-			
-			VAR _RevenueMaximum = MAX ( 1, _RawRevenueMaximum * 1.15 )
-			VAR _RawCoverageMaximum = MAXX ( _ChartData, COALESCE ( [@Coverage], 0 ) )
-			VAR _CoverageMaximum = MAX ( 2.5, _RawCoverageMaximum * 1.20 )
-			
-			VAR _Left = 66
-			VAR _Top = 38
-			VAR _PlotWidth = 760
-			VAR _PlotHeight = 232
-			VAR _Step = DIVIDE ( _PlotWidth, 6 )
-			VAR _BarWidth = 58
-			VAR _Baseline = _Top + _PlotHeight
-			
-			VAR _Points =
-			    ADDCOLUMNS (
-			        _ChartData,
-			        "@X", _Left + ( [@Index] + 0.5 ) * _Step,
-			        "@TargetY",
-			            _Baseline
-			                - _PlotHeight * DIVIDE ( COALESCE ( [@Target], 0 ), _RevenueMaximum, 0 ),
-			        "@LatestHeight",
-			            _PlotHeight * DIVIDE ( COALESCE ( [@Latest], 0 ), _RevenueMaximum, 0 ),
-			        "@PipelineHeight",
-			            _PlotHeight * DIVIDE ( COALESCE ( [@WeightedPipeline], 0 ), _RevenueMaximum, 0 ),
-			        "@CoverageY",
-			            _Baseline
-			                - _PlotHeight * DIVIDE ( COALESCE ( [@Coverage], 0 ), _CoverageMaximum, 0 )
-			    )
-			
-			VAR _Grid =
-			    CONCATENATEX (
-			        GENERATESERIES ( 0, 5, 1 ),
-			        VAR _I = [Value]
-			        VAR _Y = _Top + _PlotHeight * DIVIDE ( _I, 5 )
-			        VAR _RevenueValue = _RevenueMaximum * DIVIDE ( 5 - _I, 5 )
-			        VAR _CoverageValue = _CoverageMaximum * DIVIDE ( 5 - _I, 5 )
-			        RETURN
-			            "<line x1='" & FORMAT ( _Left, "0", "en-US" )
-			                & "' y1='" & FORMAT ( _Y, "0.0", "en-US" )
-			                & "' x2='" & FORMAT ( _Left + _PlotWidth, "0", "en-US" )
-			                & "' y2='" & FORMAT ( _Y, "0.0", "en-US" )
-			                & "' stroke='#ECE8ED' stroke-width='1'/>"
-			                & "<text x='52' y='" & FORMAT ( _Y + 4, "0.0", "en-US" )
-			                & "' text-anchor='end' class='roc-axis'>"
-			                & FORMAT ( _RevenueValue / 1000000, "0", "en-US" ) & "</text>"
-			                & "<text x='842' y='" & FORMAT ( _Y + 4, "0.0", "en-US" )
-			                & "' class='roc-axis'>"
-			                & FORMAT ( _CoverageValue, "0.0", "en-US" ) & "x</text>",
-			        ""
-			    )
-			
-			VAR _Bars =
-			    CONCATENATEX (
-			        _Points,
-			        VAR _X = [@X] - DIVIDE ( _BarWidth, 2 )
-			        VAR _LatestHeight = [@LatestHeight]
-			        VAR _PipelineHeight = [@PipelineHeight]
-			        VAR _LatestY = _Baseline - _LatestHeight
-			        VAR _PipelineY = _LatestY - _PipelineHeight
-			        VAR _Tooltip =
-			            FORMAT ( [@Month], "MMM yyyy", "en-US" )
-			                & ": Latest " & FORMAT ( COALESCE ( [@Latest], 0 ) / 1000000, "€0.0m", "en-US" )
-			                & ", weighted pipeline " & FORMAT ( COALESCE ( [@WeightedPipeline], 0 ) / 1000000, "€0.0m", "en-US" )
-			        RETURN
-			            "<g><title>" & _Tooltip & "</title>"
-			                & IF (
-			                    _LatestHeight > 0,
-			                    "<rect x='" & FORMAT ( _X, "0.0", "en-US" )
-			                        & "' y='" & FORMAT ( _LatestY, "0.0", "en-US" )
-			                        & "' width='" & FORMAT ( _BarWidth, "0", "en-US" )
-			                        & "' height='" & FORMAT ( _LatestHeight, "0.0", "en-US" )
-			                        & "' rx='2' fill='#6FA9B9'/>",
-			                    ""
-			                )
-			                & IF (
-			                    _PipelineHeight > 0,
-			                    "<rect x='" & FORMAT ( _X, "0.0", "en-US" )
-			                        & "' y='" & FORMAT ( _PipelineY, "0.0", "en-US" )
-			                        & "' width='" & FORMAT ( _BarWidth, "0", "en-US" )
-			                        & "' height='" & FORMAT ( _PipelineHeight, "0.0", "en-US" )
-			                        & "' rx='2' fill='#9B73AA'/>",
-			                    ""
-			                )
-			                & "</g>",
-			        "",
-			        [@Index], ASC
-			    )
-			
-			VAR _TargetPoints =
-			    CONCATENATEX (
-			        FILTER ( _Points, NOT ISBLANK ( [@Target] ) ),
-			        FORMAT ( [@X], "0.0", "en-US" ) & "," & FORMAT ( [@TargetY], "0.0", "en-US" ),
-			        " ",
-			        [@Index], ASC
-			    )
-			
-			VAR _CoveragePoints =
-			    CONCATENATEX (
-			        FILTER ( _Points, NOT ISBLANK ( [@Coverage] ) ),
-			        FORMAT ( [@X], "0.0", "en-US" ) & "," & FORMAT ( [@CoverageY], "0.0", "en-US" ),
-			        " ",
-			        [@Index], ASC
-			    )
-			
-			VAR _CoverageMarkers =
-			    CONCATENATEX (
-			        FILTER ( _Points, NOT ISBLANK ( [@Coverage] ) ),
-			        "<circle cx='" & FORMAT ( [@X], "0.0", "en-US" )
-			            & "' cy='" & FORMAT ( [@CoverageY], "0.0", "en-US" )
-			            & "' r='5.5' fill='#331045'/>"
-			            & "<text x='" & FORMAT ( [@X], "0.0", "en-US" )
-			            & "' y='" & FORMAT ( [@CoverageY] - 13, "0.0", "en-US" )
-			            & "' text-anchor='middle' class='roc-coverage-label'>"
-			            & FORMAT ( [@Coverage], "0.0", "en-US" ) & "x</text>",
-			        "",
-			        [@Index], ASC
-			    )
-			
-			VAR _MonthLabels =
-			    CONCATENATEX (
-			        _Points,
-			        "<text x='" & FORMAT ( [@X], "0.0", "en-US" )
-			            & "' y='298' text-anchor='middle' class='roc-month'>"
-			            & FORMAT ( [@Month], "MMM yyyy", "en-US" ) & "</text>",
-			        "",
-			        [@Index], ASC
-			    )
-			
-			RETURN
-			    IF (
-			        ISBLANK ( _LastActualMonth ),
-			        "<div style='font:14px Segoe UI;color:#6F6872;padding:16px'>No actual month is available to anchor the six-month outlook.</div>",
-			        IF (
-			            NOT _HasData,
-			            "<div style='font:14px Segoe UI;color:#6F6872;padding:16px'>No Budget, Latest Estimate, or open-pipeline data was found for the six months after "
-			                & FORMAT ( _LastActualMonth, "MMM yyyy", "en-US" ) & ".</div>",
-			            "<style>
-			                *{box-sizing:border-box}.roc-card{width:100%;height:100%;min-height:390px;padding:15px 18px 9px;background:#fff;border:1px solid #E3DEE6;border-radius:11px;box-shadow:0 2px 6px rgba(51,16,69,.07);font-family:'Segoe UI',Arial,sans-serif;overflow:hidden}.roc-title{font-size:17px;font-weight:750;color:#211D22;letter-spacing:.2px}.roc-legend{display:flex;gap:24px;align-items:center;margin:11px 0 0;color:#504A52;font-size:11px;white-space:nowrap}.roc-item{display:flex;align-items:center;gap:7px}.roc-box{width:14px;height:12px;border-radius:2px}.roc-dash{width:27px;border-top:2px dashed #6F4A7C}.roc-dot{width:11px;height:11px;border-radius:50%;background:#331045}.roc-svg{display:block;width:100%;height:315px}.roc-axis,.roc-month{fill:#635D65;font:11px 'Segoe UI',Arial,sans-serif}.roc-coverage-label{fill:#2D2430;font:700 12px 'Segoe UI',Arial,sans-serif}.roc-unit{fill:#554F57;font:600 11px 'Segoe UI',Arial,sans-serif}
-			            </style>
-			            <div class='roc-card'>
-			              <div class='roc-title'>REVENUE OUTLOOK &amp; COVERAGE</div>
-			              <div class='roc-legend'>
-			                <div class='roc-item'><span class='roc-dash'></span><span>Revenue Target</span></div>
-			                <div class='roc-item'><span class='roc-box' style='background:#6FA9B9'></span><span>Latest Forecast</span></div>
-			                <div class='roc-item'><span class='roc-box' style='background:#9B73AA'></span><span>Weighted Pipeline</span></div>
-			                <div class='roc-item'><span class='roc-dot'></span><span>Coverage (x)</span></div>
-			              </div>
-			              <svg class='roc-svg' viewBox='0 0 900 325' preserveAspectRatio='xMidYMid meet'>
-			                <text x='7' y='23' class='roc-unit'>Revenue (€m)</text>
-			                <text x='893' y='23' text-anchor='end' class='roc-unit'>Coverage (x)</text>"
-			                & _Grid
-			                & "<line x1='" & FORMAT ( _Left, "0", "en-US" ) & "' y1='" & FORMAT ( _Baseline, "0", "en-US" )
-			                & "' x2='" & FORMAT ( _Left + _PlotWidth, "0", "en-US" ) & "' y2='" & FORMAT ( _Baseline, "0", "en-US" ) & "' stroke='#BBB5BD'/>"
-			                & _Bars
-			                & "<polyline points='" & _TargetPoints & "' fill='none' stroke='#6F4A7C' stroke-width='2.5' stroke-dasharray='8 6' stroke-linecap='round' stroke-linejoin='round'/>"
-			                & "<polyline points='" & _CoveragePoints & "' fill='none' stroke='#331045' stroke-opacity='.55' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/>"
-			                & _CoverageMarkers & _MonthLabels
-			                & "</svg></div>"
-			        )
-			    )
-		lineageTag: c21bd04c-ac4a-497f-9dcb-6c30e07a4ed7
-
-	measure '90-Day Outlook HTML' =
-			
-			VAR _BudgetVersion =
-			    "Budget"
-			
-			VAR _LatestVersion =
-			    "Latest Estimate"
-			
-			
-			-- Last month selected in the date slicer
-			VAR _SelectedEndMonth =
-			    MAXX (
-			        ALLSELECTED ( dimDate[MonthStartDate] ),
-			        dimDate[MonthStartDate]
-			    )
-			
-			
-			-- Last available actual-sales month, independent of date filters
-			VAR _LastActualDataMonth =
-			    CALCULATE (
-			        MAX ( factSales[year_month] ),
-			        REMOVEFILTERS ( dimDate )
-			    )
-			
-			
-			-- Use the selected month when it is inside the actual-data range
-			VAR _LastActualMonth =
-			    IF (
-			        ISBLANK ( _LastActualDataMonth ),
-			        BLANK (),
-			        MIN (
-			            COALESCE (
-			                _SelectedEndMonth,
-			                _LastActualDataMonth
-			            ),
-			            _LastActualDataMonth
-			        )
-			    )
-			
-			
-			-- Next three months
-			VAR _StartMonth =
-			    EDATE (
-			        _LastActualMonth,
-			        1
-			    )
-			
-			VAR _EndMonth =
-			    EDATE (
-			        _StartMonth,
-			        3
-			    )
-			
-			
-			-- Comparable prior-year period
-			VAR _PYStartMonth =
-			    EDATE (
-			        _StartMonth,
-			        -12
-			    )
-			
-			VAR _PYEndMonth =
-			    EDATE (
-			        _EndMonth,
-			        -12
-			    )
-			
-			
-			-- Latest Estimate revenue for the next 90 days
-			VAR _LatestRevenue =
-			    CALCULATE (
-			        SUM (
-			            factForecast[forecast_revenue_eur]
-			        ),
-			        REMOVEFILTERS ( dimDate ),
-			        REMOVEFILTERS (
-			            factForecast[forecast_version]
-			        ),
-			        TREATAS (
-			            { _LatestVersion },
-			            factForecast[forecast_version]
-			        ),
-			        FILTER (
-			            ALL ( factForecast[year_month] ),
-			            factForecast[year_month] >= _StartMonth
-			                && factForecast[year_month] < _EndMonth
-			        )
-			    )
-			
-			
-			-- Budget revenue for the next 90 days
-			VAR _BudgetRevenue =
-			    CALCULATE (
-			        SUM (
-			            factForecast[forecast_revenue_eur]
-			        ),
-			        REMOVEFILTERS ( dimDate ),
-			        REMOVEFILTERS (
-			            factForecast[forecast_version]
-			        ),
-			        TREATAS (
-			            { _BudgetVersion },
-			            factForecast[forecast_version]
-			        ),
-			        FILTER (
-			            ALL ( factForecast[year_month] ),
-			            factForecast[year_month] >= _StartMonth
-			                && factForecast[year_month] < _EndMonth
-			        )
-			    )
-			
-			
-			-- Actual revenue in the comparable prior-year period
-			VAR _PriorYearRevenue =
-			    CALCULATE (
-			        [Revenue],
-			        REMOVEFILTERS ( dimDate ),
-			        FILTER (
-			            ALL ( factSales[year_month] ),
-			            factSales[year_month] >= _PYStartMonth
-			                && factSales[year_month] < _PYEndMonth
-			        )
-			    )
-			
-			
-			-- Latest Estimate units
-			VAR _LatestUnits =
-			    CALCULATE (
-			        SUM (
-			            factForecast[forecast_units]
-			        ),
-			        REMOVEFILTERS ( dimDate ),
-			        REMOVEFILTERS (
-			            factForecast[forecast_version]
-			        ),
-			        TREATAS (
-			            { _LatestVersion },
-			            factForecast[forecast_version]
-			        ),
-			        FILTER (
-			            ALL ( factForecast[year_month] ),
-			            factForecast[year_month] >= _StartMonth
-			                && factForecast[year_month] < _EndMonth
-			        )
-			    )
-			
-			
-			-- Budget units
-			VAR _BudgetUnits =
-			    CALCULATE (
-			        SUM (
-			            factForecast[forecast_units]
-			        ),
-			        REMOVEFILTERS ( dimDate ),
-			        REMOVEFILTERS (
-			            factForecast[forecast_version]
-			        ),
-			        TREATAS (
-			            { _BudgetVersion },
-			            factForecast[forecast_version]
-			        ),
-			        FILTER (
-			            ALL ( factForecast[year_month] ),
-			            factForecast[year_month] >= _StartMonth
-			                && factForecast[year_month] < _EndMonth
-			        )
-			    )
-			
-			
-			-- Demand compared with prior year
-			VAR _DemandDelta =
-			    IF (
-			        NOT ISBLANK ( _LatestRevenue )
-			            && NOT ISBLANK ( _PriorYearRevenue )
-			            && _PriorYearRevenue <> 0,
-			        DIVIDE (
-			            _LatestRevenue - _PriorYearRevenue,
-			            ABS ( _PriorYearRevenue )
-			        )
-			    )
-			
-			
-			-- Volume compared with Budget
-			VAR _VolumeDelta =
-			    IF (
-			        NOT ISBLANK ( _LatestUnits )
-			            && NOT ISBLANK ( _BudgetUnits )
-			            && _BudgetUnits <> 0,
-			        DIVIDE (
-			            _LatestUnits - _BudgetUnits,
-			            ABS ( _BudgetUnits )
-			        )
-			    )
-			
-			
-			-- Implied average selling price
-			VAR _LatestASP =
-			    DIVIDE (
-			        _LatestRevenue,
-			        _LatestUnits
-			    )
-			
-			VAR _BudgetASP =
-			    DIVIDE (
-			        _BudgetRevenue,
-			        _BudgetUnits
-			    )
-			
-			
-			-- Implied price compared with Budget
-			VAR _PriceDelta =
-			    IF (
-			        NOT ISBLANK ( _LatestASP )
-			            && NOT ISBLANK ( _BudgetASP )
-			            && _BudgetASP <> 0,
-			        DIVIDE (
-			            _LatestASP - _BudgetASP,
-			            ABS ( _BudgetASP )
-			        )
-			    )
-			
-			
-			-- Product-family comparison
-			VAR _ProductData =
-			    ADDCOLUMNS (
-			        FILTER (
-			            ALLSELECTED (
-			                dimProduct[product_family]
-			            ),
-			            NOT ISBLANK (
-			                dimProduct[product_family]
-			            )
-			        ),
-			
-			        "@Latest",
-			            CALCULATE (
-			                SUM (
-			                    factForecast[forecast_revenue_eur]
-			                ),
-			                REMOVEFILTERS ( dimDate ),
-			                REMOVEFILTERS (
-			                    factForecast[forecast_version]
-			                ),
-			                TREATAS (
-			                    { _LatestVersion },
-			                    factForecast[forecast_version]
-			                ),
-			                FILTER (
-			                    ALL ( factForecast[year_month] ),
-			                    factForecast[year_month] >= _StartMonth
-			                        && factForecast[year_month] < _EndMonth
-			                )
-			            ),
-			
-			        "@Budget",
-			            CALCULATE (
-			                SUM (
-			                    factForecast[forecast_revenue_eur]
-			                ),
-			                REMOVEFILTERS ( dimDate ),
-			                REMOVEFILTERS (
-			                    factForecast[forecast_version]
-			                ),
-			                TREATAS (
-			                    { _BudgetVersion },
-			                    factForecast[forecast_version]
-			                ),
-			                FILTER (
-			                    ALL ( factForecast[year_month] ),
-			                    factForecast[year_month] >= _StartMonth
-			                        && factForecast[year_month] < _EndMonth
-			                )
-			            )
-			    )
-			
-			
-			VAR _ProductVariance =
-			    ADDCOLUMNS (
-			        _ProductData,
-			
-			        "@Variance",
-			            VAR _Latest =
-			                [@Latest]
-			
-			            VAR _Budget =
-			                [@Budget]
-			
-			            RETURN
-			                IF (
-			                    NOT ISBLANK ( _Latest )
-			                        && NOT ISBLANK ( _Budget )
-			                        && _Budget <> 0,
-			                    DIVIDE (
-			                        _Latest - _Budget,
-			                        ABS ( _Budget )
-			                    )
-			                )
-			    )
-			
-			
-			VAR _WeakestProduct =
-			    TOPN (
-			        1,
-			        FILTER (
-			            _ProductVariance,
-			            NOT ISBLANK ( [@Variance] )
-			        ),
-			        [@Variance], ASC,
-			        dimProduct[product_family], ASC
-			    )
-			
-			
-			VAR _WeakestName =
-			    MAXX (
-			        _WeakestProduct,
-			        dimProduct[product_family]
-			    )
-			
-			
-			VAR _WeakestVariance =
-			    MAXX (
-			        _WeakestProduct,
-			        [@Variance]
-			    )
-			
-			
-			-- Data availability
-			VAR _HasLatestForecast =
-			    NOT ISBLANK ( _LatestRevenue )
-			
-			VAR _HasBudget =
-			    NOT ISBLANK ( _BudgetRevenue )
-			
-			VAR _HasPriorYear =
-			    NOT ISBLANK ( _PriorYearRevenue )
-			
-			
-			-- Demand narrative
-			VAR _DemandTitle =
-			    SWITCH (
-			        TRUE (),
-			
-			        NOT _HasLatestForecast,
-			            "Demand forecast unavailable",
-			
-			        ISBLANK ( _DemandDelta ),
-			            "Prior-year comparison unavailable",
-			
-			        _DemandDelta >= 0,
-			            "Demand expected to remain above PY",
-			
-			        "Demand expected below PY"
-			    )
-			
-			
-			VAR _DemandDetail =
-			    SWITCH (
-			        TRUE (),
-			
-			        NOT _HasLatestForecast,
-			            "No Latest Estimate values found for the next 90 days",
-			
-			        NOT _HasPriorYear,
-			            "No actual revenue found for the comparable prior-year period",
-			
-			        ISBLANK ( _DemandDelta ),
-			            "Demand change could not be calculated",
-			
-			        FORMAT (
-			            ABS ( _DemandDelta ),
-			            "0.0%"
-			        )
-			            & IF (
-			                _DemandDelta >= 0,
-			                " above",
-			                " below"
-			            )
-			            & " prior year over the next 90 days"
-			    )
-			
-			
-			-- Product narrative
-			VAR _ProductTitle =
-			    SWITCH (
-			        TRUE (),
-			
-			        NOT _HasLatestForecast
-			            || NOT _HasBudget,
-			            "Product outlook unavailable",
-			
-			        ISBLANK ( _WeakestName ),
-			            "Product comparison unavailable",
-			
-			        _WeakestVariance < 0,
-			            _WeakestName & " below plan",
-			
-			        "Product portfolio at or above plan"
-			    )
-			
-			
-			VAR _ProductDetail =
-			    SWITCH (
-			        TRUE (),
-			
-			        NOT _HasLatestForecast,
-			            "No Latest Estimate product forecast is available",
-			
-			        NOT _HasBudget,
-			            "No Budget product forecast is available",
-			
-			        ISBLANK ( _WeakestVariance ),
-			            "No valid product-family comparison could be calculated",
-			
-			        _WeakestVariance < 0,
-			            FORMAT (
-			                ABS ( _WeakestVariance ),
-			                "0.0%"
-			            )
-			                & " below Budget — largest product-family gap",
-			
-			        _WeakestName
-			            & " is the lowest performer at "
-			            & FORMAT (
-			                _WeakestVariance,
-			                "+0.0%;-0.0%;0.0%"
-			            )
-			    )
-			
-			
-			-- Volume and price narrative
-			VAR _DriverTitle =
-			    SWITCH (
-			        TRUE (),
-			
-			        ISBLANK ( _VolumeDelta )
-			            || ISBLANK ( _PriceDelta ),
-			            "Volume and price view unavailable",
-			
-			        _VolumeDelta >= 0
-			            && _PriceDelta < 0,
-			            "Volume offsets pricing pressure",
-			
-			        _VolumeDelta >= 0
-			            && _PriceDelta >= 0,
-			            "Volume and pricing support outlook",
-			
-			        _VolumeDelta < 0
-			            && _PriceDelta >= 0,
-			            "Pricing offsets volume pressure",
-			
-			        "Volume and pricing under pressure"
-			    )
-			
-			
-			VAR _DriverDetail =
-			    SWITCH (
-			        TRUE (),
-			
-			        ISBLANK ( _LatestUnits )
-			            || ISBLANK ( _BudgetUnits ),
-			            "Forecast units are missing for Latest Estimate or Budget",
-			
-			        ISBLANK ( _LatestASP )
-			            || ISBLANK ( _BudgetASP ),
-			            "Implied average selling price could not be calculated",
-			
-			        ISBLANK ( _VolumeDelta )
-			            || ISBLANK ( _PriceDelta ),
-			            "Budget comparison could not be calculated",
-			
-			        "Volume "
-			            & FORMAT (
-			                _VolumeDelta,
-			                "+0.0%;-0.0%;0.0%"
-			            )
-			            & " and implied price "
-			            & FORMAT (
-			                _PriceDelta,
-			                "+0.0%;-0.0%;0.0%"
-			            )
-			            & " versus Budget"
-			    )
-			
-			
-			-- Icons
-			VAR _TrendIcon =
-			    "<svg viewBox='0 0 64 64' aria-hidden='true'>
-			        <path d='M12 46 L27 31 L37 39 L53 20'
-			              fill='none'
-			              stroke='white'
-			              stroke-width='6'
-			              stroke-linecap='round'
-			              stroke-linejoin='round'/>
-			        <path d='M41 20 H53 V32'
-			              fill='none'
-			              stroke='white'
-			              stroke-width='6'
-			              stroke-linecap='round'
-			              stroke-linejoin='round'/>
-			    </svg>"
-			
-			
-			VAR _DocumentIcon =
-			    "<svg viewBox='0 0 64 64' aria-hidden='true'>
-			        <path d='M17 10 H39 L50 21 V54 H17 Z'
-			              fill='none'
-			              stroke='white'
-			              stroke-width='4'/>
-			        <path d='M39 10 V22 H50 M24 31 H42 M24 40 H39 M24 49 H34'
-			              fill='none'
-			              stroke='white'
-			              stroke-width='4'
-			              stroke-linecap='round'/>
-			    </svg>"
-			
-			
-			VAR _BalanceIcon =
-			    "<svg viewBox='0 0 64 64' aria-hidden='true'>
-			        <path d='M32 15 V51 M19 51 H45 M14 22 H50
-			                 M32 12 C35 12 37 14 37 17
-			                 C37 20 35 22 32 22
-			                 C29 22 27 20 27 17
-			                 C27 14 29 12 32 12 Z'
-			              fill='none'
-			              stroke='white'
-			              stroke-width='4'
-			              stroke-linecap='round'/>
-			        <path d='M14 22 L7 37 H21 Z M50 22 L43 37 H57 Z'
-			              fill='none'
-			              stroke='white'
-			              stroke-width='4'
-			              stroke-linejoin='round'/>
-			    </svg>"
-			
-			
-			RETURN
-			    IF (
-			        ISBLANK ( _LastActualMonth ),
-			
-			        "<div style='
-			            width:100%;
-			            height:100vh;
-			            display:flex;
-			            align-items:center;
-			            justify-content:center;
-			            padding:12px;
-			            background:#FFFFFF;
-			            border:1px solid #E3DEE6;
-			            border-radius:5px;
-			            color:#6F6872;
-			            font:11px Segoe UI,Arial,sans-serif;
-			            text-align:center;
-			        '>
-			            No actual month is available to anchor the 90-day outlook.
-			        </div>",
-			
-			        "
-			        <style>
-			            html,
-			            body {
-			                width:100%;
-			                height:100vh;
-			                margin:0;
-			                padding:0;
-			                overflow:hidden;
-			            }
-			
-			            * {
-			                box-sizing:border-box;
-			            }
-			
-			            .odo-card {
-			                width:100%;
-			                height:100vh;
-			                min-width:0;
-			                min-height:0;
-			                display:flex;
-			                flex-direction:column;
-			                padding:clamp(5px,2vh,11px)
-			                        clamp(6px,3vw,13px);
-			                overflow:hidden;
-			                background:#FFFFFF;
-			                border:1px solid #E3DEE6;
-			                border-radius:8px;
-			                font-family:'Segoe UI',Arial,sans-serif;
-			            }
-			
-			            .odo-title {
-			                flex:0 0 auto;
-			                margin:0 0 clamp(4px,1.5vh,9px);
-			                overflow:hidden;
-			                color:#211D22;
-			                font-size:clamp(13px,4.5vw,18px);
-			                font-weight:750;
-			                line-height:1.1;
-			                text-overflow:ellipsis;
-			                white-space:nowrap;
-			            }
-			
-			            .odo-period {
-			                margin-left:6px;
-			                color:#79727B;
-			                font-size:clamp(7px,2.3vw,9px);
-			                font-weight:500;
-			            }
-			
-			            .odo-stack {
-			                flex:1 1 auto;
-			                min-width:0;
-			                min-height:0;
-			                display:grid;
-			                grid-template-rows:repeat(3,minmax(0,1fr));
-			                gap:clamp(4px,1.5vh,7px);
-			                overflow:hidden;
-			            }
-			
-			            .odo-row {
-			                min-width:0;
-			                min-height:0;
-			                display:grid;
-			                grid-template-columns:
-			                    clamp(47px,20%,66px)
-			                    minmax(0,1fr);
-			                align-items:center;
-			                overflow:hidden;
-			                background:#FFFFFF;
-			                border:1px solid #E5E0E7;
-			                border-radius:7px;
-			                box-shadow:0 1px 4px rgba(51,16,69,.045);
-			            }
-			
-			            .odo-icon-wrap {
-			                width:100%;
-			                height:100%;
-			                display:flex;
-			                align-items:center;
-			                justify-content:center;
-			                overflow:hidden;
-			            }
-			
-			            .odo-icon {
-			                width:clamp(33px,13vw,45px);
-			                height:clamp(33px,13vw,45px);
-			                flex:0 0 auto;
-			                padding:clamp(6px,2vw,8px);
-			                border-radius:50%;
-			                box-shadow:
-			                    inset 0 -3px 7px rgba(0,0,0,.07),
-			                    0 2px 5px rgba(51,16,69,.10);
-			            }
-			
-			            .odo-icon svg {
-			                display:block;
-			                width:100%;
-			                height:100%;
-			            }
-			
-			            .odo-copy {
-			                min-width:0;
-			                max-height:100%;
-			                padding:
-			                    clamp(3px,1vh,6px)
-			                    clamp(5px,2vw,9px)
-			                    clamp(3px,1vh,6px)
-			                    0;
-			                overflow:hidden;
-			            }
-			
-			            .odo-head {
-			                overflow:hidden;
-			                color:#252126;
-			                font-size:clamp(10px,3.7vw,14px);
-			                font-weight:680;
-			                line-height:1.12;
-			                text-overflow:ellipsis;
-			            }
-			
-			            .odo-detail {
-			                display:-webkit-box;
-			                margin-top:clamp(2px,.8vh,4px);
-			                overflow:hidden;
-			                color:#69626B;
-			                font-size:clamp(7px,2.7vw,10px);
-			                line-height:1.2;
-			                -webkit-box-orient:vertical;
-			                -webkit-line-clamp:2;
-			            }
-			
-			            @media (max-height:235px) {
-			                .odo-title {
-			                    margin-bottom:3px;
-			                    font-size:12px;
-			                }
-			
-			                .odo-stack {
-			                    gap:3px;
-			                }
-			
-			                .odo-icon {
-			                    width:30px;
-			                    height:30px;
-			                    padding:5px;
-			                }
-			
-			                .odo-detail {
-			                    margin-top:1px;
-			                    font-size:7px;
-			                    -webkit-line-clamp:1;
-			                }
-			            }
-			        </style>
-			
-			        <div class='odo-card'>
-			
-			            <div class='odo-title'>
-			                90-Day Outlook
-			
-			                <span class='odo-period'>"
-			                    & FORMAT (
-			                        _StartMonth,
-			                        "MMM yyyy",
-			                        "en-US"
-			                    )
-			                    & " – "
-			                    & FORMAT (
-			                        EDATE (
-			                            _EndMonth,
-			                            -1
-			                        ),
-			                        "MMM yyyy",
-			                        "en-US"
-			                    )
-			                    & "</span>
-			            </div>
-			
-			            <div class='odo-stack'>
-			
-			                <div class='odo-row'>
-			
-			                    <div class='odo-icon-wrap'>
-			                        <div class='odo-icon'
-			                             style='background:#20A36A'>"
-			                            & _TrendIcon &
-			                        "</div>
-			                    </div>
-			
-			                    <div class='odo-copy'>
-			
-			                        <div class='odo-head'>"
-			                            & _DemandTitle &
-			                        "</div>
-			
-			                        <div class='odo-detail'>"
-			                            & _DemandDetail &
-			                        "</div>
-			
-			                    </div>
-			
-			                </div>
-			
-			                <div class='odo-row'>
-			
-			                    <div class='odo-icon-wrap'>
-			                        <div class='odo-icon'
-			                             style='background:#E89A21'>"
-			                            & _DocumentIcon &
-			                        "</div>
-			                    </div>
-			
-			                    <div class='odo-copy'>
-			
-			                        <div class='odo-head'>"
-			                            & _ProductTitle &
-			                        "</div>
-			
-			                        <div class='odo-detail'>"
-			                            & _ProductDetail &
-			                        "</div>
-			
-			                    </div>
-			
-			                </div>
-			
-			                <div class='odo-row'>
-			
-			                    <div class='odo-icon-wrap'>
-			                        <div class='odo-icon'
-			                             style='background:#5DA4B8'>"
-			                            & _BalanceIcon &
-			                        "</div>
-			                    </div>
-			
-			                    <div class='odo-copy'>
-			
-			                        <div class='odo-head'>"
-			                            & _DriverTitle &
-			                        "</div>
-			
-			                        <div class='odo-detail'>"
-			                            & _DriverDetail &
-			                        "</div>
-			
-			                    </div>
-			
-			                </div>
-			
-			            </div>
-			
-			        </div>"
-			    )
-		displayFolder: 03 Forecasting
-		lineageTag: 19da3507-2489-4c95-b2f0-7ef300c8145a
-
 	measure 'Forecast Version Comparison HTML' = ```
 			
 			VAR _Versions =
@@ -22678,16 +21231,21 @@ table _Measures
 			        {
 			            { "Budget", "Budget", "#B7B7B7", 1 },
 			            { "Rolling Forecast", "Rolling Forecast", "#5B9FB4", 2 },
-			            { "Latest Estimate", "Latest Forecast", "#D99A2B ", 3 }
+			            { "Latest Estimate", "Latest Forecast", "#D99A2B", 3 }
 			        }
 			    )
 			
 			VAR _LastActualForecastMonth =
-			    CALCULATE (
-			        MAX ( factForecast[year_month] ),
-			        REMOVEFILTERS ( dimDate ),
-			        REMOVEFILTERS ( factForecast[forecast_version] ),
-			        factForecast[actual_revenue_eur] <> BLANK ()
+			    MAXX (
+			        FILTER (
+			            ALLSELECTED ( dimDate[MonthStartDate] ),
+			            CALCULATE (
+			                COUNTROWS ( factForecast ),
+			                REMOVEFILTERS ( factForecast[forecast_version] ),
+			                factForecast[actual_revenue_eur] <> BLANK ()
+			            ) > 0
+			        ),
+			        dimDate[MonthStartDate]
 			    )
 			
 			VAR _StartMonth =
@@ -22701,35 +21259,53 @@ table _Measures
 			        _Versions,
 			
 			        "@Forecast",
-			            VAR _Version = [VersionKey]
+			            VAR _Version =
+			                [VersionKey]
+			
 			            RETURN
 			                CALCULATE (
 			                    SUM ( factForecast[forecast_revenue_eur] ),
-			                    REMOVEFILTERS ( dimDate ),
-			                    REMOVEFILTERS ( factForecast[forecast_version] ),
-			                    factForecast[forecast_version] = _Version,
-			                    FILTER (
-			                        ALL ( factForecast[year_month] ),
-			                        factForecast[year_month] >= _StartMonth
-			                            && factForecast[year_month] < _EndMonth
-			                    )
-			                ),
+			
+			                    REMOVEFILTERS (
+			                        factForecast[forecast_version]
+			                    ),
+			
+			                    TREATAS (
+			                        { _Version },
+			                        factForecast[forecast_version]
+			                    ),
+			
+			                    KEEPFILTERS (
+			                        DATESBETWEEN (
+			                            dimDate[Date],
+			                            _StartMonth,
+			                            EOMONTH ( _EndMonth, -1 )))),
 			
 			        "@Actual",
-			            VAR _Version = [VersionKey]
+			            VAR _Version =
+			                [VersionKey]
+			
 			            RETURN
 			                CALCULATE (
 			                    SUM ( factForecast[actual_revenue_eur] ),
-			                    REMOVEFILTERS ( dimDate ),
-			                    REMOVEFILTERS ( factForecast[forecast_version] ),
-			                    factForecast[forecast_version] = _Version,
-			                    FILTER (
-			                        ALL ( factForecast[year_month] ),
-			                        factForecast[year_month] >= _StartMonth
-			                            && factForecast[year_month] < _EndMonth
+			
+			                    REMOVEFILTERS (
+			                        factForecast[forecast_version]
+			                    ),
+			
+			                    TREATAS (
+			                        { _Version },
+			                        factForecast[forecast_version]
+			                    ),
+			
+			                    KEEPFILTERS (
+			                        DATESBETWEEN (
+			                            dimDate[Date],
+			                            _StartMonth,
+			                            EOMONTH ( _EndMonth, -1 )
+			                        )
 			                    )
-			                )
-			    )
+			                ))
 			
 			VAR _ErrorData =
 			    ADDCOLUMNS (
@@ -23528,7 +22104,7 @@ table _Measures
 			
 			VAR _LastAvailableMonth =
 			    CALCULATE (
-			        MAX ( factSales[year_month] ),
+			        MAX ( dimDate[MonthStartDate] ),
 			        REMOVEFILTERS ( dimDate )
 			    )
 			
@@ -23713,9 +22289,9 @@ table _Measures
 			                                                    ),
 			
 			                                                    FILTER (
-			                                                        ALL ( factSales[year_month] ),
-			                                                        factSales[year_month] >= _TargetMonth
-			                                                            && factSales[year_month] < _NextTargetMonth
+			                                                        ALL ( dimDate[MonthStartDate] ),
+			                                                        dimDate[MonthStartDate] >= _TargetMonth
+			                                                            && dimDate[MonthStartDate] < _NextTargetMonth
 			                                                    )
 			                                                )
 			
@@ -23865,12 +22441,9 @@ table _Measures
 			
 			.cr-table th {
 			    background:#FFFFFF;
-			
 			    font-size: 10px;
-			
 			    font-weight:700;
 			    text-align:center;
-			
 			    white-space:nowrap;
 			    overflow:hidden;
 			    text-overflow:ellipsis;
@@ -23894,13 +22467,10 @@ table _Measures
 			
 			
 			.cr-super-header th {
-			
 			    color:#5A545B;
 			    font-size: 10px;
 			    font-weight:600;
 			}
-			
-			
 			.cr-month-header th {
 			    border-bottom:1px solid #D8D3DA;
 			}
@@ -24032,17 +22602,20 @@ table _Measures
 
 	measure 'Opportunities Count' = COUNT(factPipeline[opportunity_id])
 		formatString: 0
+		displayFolder: 08 Executive
 		lineageTag: a6c2e9b6-0ea1-40f2-b2e2-a4d9f6505e01
 
 	measure 'Attainment % by Sales Rep' =
 			
 			VAR quota = SUM(dimSalesRep[annual_quota_eur])
 			RETURN
-			DIVIDE([Revenue], quota)-1
+			DIVIDE([Revenue], quota)
 		formatString: #,0.00\ %;-#,0.00\ %;#,0.00\ %
+		displayFolder: 08 Executive
 		lineageTag: 7365a4a8-f73a-4f6a-850e-358f72191521
 
 	measure 'Sales Rep Target' = sum(dimSalesRep[annual_quota_eur])
+		displayFolder: 08 Executive
 		lineageTag: 99cd9de9-1b7c-45f5-ab1d-7c30914255a7
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
@@ -24388,6 +22961,7 @@ table _Measures
 			        </div>
 			
 			    </div>"
+		displayFolder: 08 Executive
 		lineageTag: 0240c255-3e11-40af-981e-66d40f3cac19
 
 	measure 'Commercial Growth Pipeline KPI Cards HTML 2' =
@@ -25183,6 +23757,7 @@ table _Measures
 			
 			    </div>
 			    "
+		displayFolder: 08 Executive
 		lineageTag: 0db9f052-95af-4aaa-8acf-d453ba611161
 
 	measure 'Title Product Risk Detail HTML' =
@@ -25225,6 +23800,7 @@ table _Measures
 			
 			    </div>
 			    "
+		displayFolder: 01 Risk
 		lineageTag: eae56f6d-e814-451e-9d30-872b7959a24f
 
 	measure 'Priority Actions HTML' = ```
@@ -27805,6 +26381,7 @@ table _Measures
 			
 			        </div>"
 			    )
+		displayFolder: 05 Products
 		lineageTag: f3c40b20-7443-4ab7-a63e-eefe8302b4c7
 
 	measure 'Revenue Trend Growth HTML' =
@@ -27827,7 +26404,7 @@ table _Measures
 			
 			-- Last available sales month in the selected date context
 			VAR _LastAvailableMonth =
-			    MAX ( factSales[year_month] )
+			    MAX ( dimDate[MonthStartDate] )
 			
 			
 			VAR _EndMonth =
@@ -28569,6 +27146,7 @@ table _Measures
 			
 			        </div>"
 			    )
+		displayFolder: 08 Executive
 		lineageTag: d78775fb-5b2f-460d-a2db-71ed2775e189
 
 	measure 'Portfolio Profitability HTML' =
@@ -29295,7 +27873,22 @@ table _Measures
 		displayFolder: 02 Margin
 		lineageTag: ca1df0e0-f9b1-44cc-b1f5-d25c8aa688de
 
-	measure 'GP Upside' = [Revenue] * DIVIDE([Gross Margin Target %] - [Gross Margin %], [Gross Margin Target %])
+	measure 'GP Upside' = ```
+			
+			  VAR RevenueValue = [Revenue]
+			  VAR CurrentMargin = [Gross Margin %]
+			  VAR TargetMargin = [Gross Margin Target %]
+			  RETURN
+			      IF (
+			          ISBLANK ( RevenueValue )
+			              || ISBLANK ( CurrentMargin )
+			              || ISBLANK ( TargetMargin )
+			              || TargetMargin <= 0,
+			          BLANK (),
+			          RevenueValue
+			              * DIVIDE ( TargetMargin - CurrentMargin, TargetMargin )
+			      )
+			```
 		formatString: #,0\ "€";-#,0\ "€";#,0\ "€"
 		displayFolder: 02 Margin
 		lineageTag: c9bc1c93-46c5-42c1-8de6-a6c5ce117565
@@ -30016,6 +28609,7 @@ table _Measures
 		lineageTag: fab83e6e-3e5f-45ca-82c6-285ca26fc2d2
 
 	measure 'Title Product Risk Detail 2' = "PRODUCT RISK DETAIL - " & SELECTEDVALUE(dimProduct[product_name])
+		displayFolder: 01 Risk
 		lineageTag: f1c6e802-e5ff-4780-a09a-6d699241682b
 
 	measure 'ASP vs Unit Cost HTML' =
@@ -30035,7 +28629,7 @@ table _Measures
 			-- Last available month, removing only the MonthStartDate filter
 			VAR _LastActualMonth =
 			    CALCULATE (
-			        MAX ( factSales[year_month] ),
+			        MAX ( dimDate[Date]),
 			        REMOVEFILTERS ( dimDate[MonthStartDate] )
 			    )
 			
@@ -31037,6 +29631,7 @@ table _Measures
 			VAR _region = SELECTEDVALUE(dimRegion[region])
 			RETURN
 			"RISK OPERATIONS - REGION: "&_region
+		displayFolder: 01 Risk
 		lineageTag: 1271b23f-2432-473f-b5c4-a68f631a8a30
 
 	measure 'Product Risk Assessment HTML' =
@@ -32132,6 +30727,125 @@ table _Measures
 		displayFolder: 00 Core Measures
 		lineageTag: fd4e9257-bd5d-4125-97f9-c870da230763
 
+	measure 'Risk Product Count' =
+			
+			DISTINCTCOUNT( factMlPredictions[product_id] )
+		formatString: 0
+		displayFolder: 01 Risk
+		lineageTag: 6b4d9e21-8f73-4c5a-a102-7d6e3b9f4c28
+
+	measure 'Selected Forecast Version' = ```
+			
+			  SELECTEDVALUE(
+			      factForecast[forecast_version],
+			      "Latest Estimate"
+			  )
+			```
+		displayFolder: 03 Forecasting
+		lineageTag: 9aff2cf7-66fe-4a41-a3b0-77b33582a5e9
+
+	measure 'Previous Customers' = ```
+			
+			  CALCULATETABLE(
+			      VALUES(factSales[customer_id]),
+			      DATEADD(dimDate[Date], -1, YEAR)
+			  )
+			```
+		formatString: 0
+		displayFolder: 04 Customers
+		lineageTag: 8c85b207-ad72-4876-a1f0-646908941bf0
+
+	measure 'NRR Starting Revenue' = ```
+			
+			  VAR PriorYearCustomerCohort =
+			      CALCULATETABLE (
+			          FILTER (
+			              VALUES ( dimCustomer[customer_id] ),
+			              CALCULATE ( [Revenue] ) > 0
+			          ),
+			          SAMEPERIODLASTYEAR ( dimDate[Date] )
+			      )
+			  RETURN
+			      CALCULATE (
+			          [Revenue],
+			          SAMEPERIODLASTYEAR ( dimDate[Date] ),
+			          KEEPFILTERS ( PriorYearCustomerCohort )
+			      )
+			```
+		formatString: #,0.###############\ "€";-#,0.###############\ "€";#,0.###############\ "€"
+		displayFolder: 00 Core Measures
+		lineageTag: a8856376-3cd5-4ad3-8dfd-e8dc5e7779fd
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-DE"}
+
+	measure 'NRR Ending Revenue' = ```
+			
+			  VAR PriorYearCustomerCohort =
+			      CALCULATETABLE (
+			          FILTER (
+			              VALUES ( dimCustomer[customer_id] ),
+			              CALCULATE ( [Revenue] ) > 0
+			          ),
+			          SAMEPERIODLASTYEAR ( dimDate[Date] )
+			      )
+			  RETURN
+			      CALCULATE (
+			          [Revenue],
+			          KEEPFILTERS ( PriorYearCustomerCohort )
+			      )
+			```
+		formatString: #,0.###############\ "€";-#,0.###############\ "€";#,0.###############\ "€"
+		displayFolder: 00 Core Measures
+		lineageTag: 4dd32413-f261-4f41-b36f-63d5fa744144
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-DE"}
+
+	measure 'Evaluation Records' = ```
+			
+			  VAR LabeledRows =
+			      CALCULATE (
+			          COUNTROWS ( factMlPredictions ),
+			          KEEPFILTERS (
+			              FILTER (
+			                  factMlPredictions,
+			                  NOT ISBLANK ( factMlPredictions[actual_risk_label_num] )
+			              )
+			          )
+			      )
+			  RETURN
+			      IF ( LabeledRows = 0, BLANK (), LabeledRows )
+			```
+		formatString: 0
+		displayFolder: 01 Risk
+		lineageTag: 19976484-c4e0-407e-bb72-899373762875
+
+	measure 'Risk Product-Region Records' = ```
+			
+			  COUNTROWS ( factMlPredictions )
+			```
+		formatString: 0
+		displayFolder: 01 Risk
+		lineageTag: 7ac1246a-fd2f-4ddc-bbbf-afc6b12f7672
+
+	measure 'High Risk F1' = ```
+			
+			  VAR PrecisionValue = [High Risk Precision]
+			  VAR RecallValue = [High Risk Recall]
+			  RETURN
+			      IF (
+			          ISBLANK ( [Evaluation Records] ),
+			          BLANK (),
+			          DIVIDE (
+			              2 * PrecisionValue * RecallValue,
+			              PrecisionValue + RecallValue
+			          )
+			      )
+			```
+		displayFolder: 06 Model Performance
+		lineageTag: 6bb90aea-91b1-450c-959d-95a7743e126d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	column Value
 		formatString: 0
 		lineageTag: 6576a37b-0815-4be0-8f16-1f5f3915f318
@@ -32143,7 +30857,7 @@ table _Measures
 
 	partition _Measures = calculated
 		mode: import
-		source = {BLANK()}
+		source = { BLANK() }
 
 	annotation PBI_Id = e0833ed3d981439d985b4fc300b8c118
 

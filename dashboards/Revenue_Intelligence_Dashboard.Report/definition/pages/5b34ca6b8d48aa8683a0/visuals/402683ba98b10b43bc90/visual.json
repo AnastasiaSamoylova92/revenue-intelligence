@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "402683ba98b10b43bc90",
   "position": {
     "x": 138.0053908355795,
@@ -322,6 +322,20 @@
             }
           ]
         }
+      },
+      {
+        "name": "cb9dbe379313c7e8b4ed",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "_Measures"
+              }
+            },
+            "Property": "FC Variance Drivers Waterfall Value"
+          }
+        },
+        "type": "Advanced"
       }
     ]
   }

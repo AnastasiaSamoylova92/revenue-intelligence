@@ -161,114 +161,49 @@
               "solid": {
                 "color": {
                   "expr": {
-                    "Conditional": {
-                      "Cases": [
-                        {
-                          "Condition": {
-                            "Comparison": {
-                              "ComparisonKind": 3,
-                              "Left": {
-                                "Measure": {
-                                  "Expression": {
-                                    "SourceRef": {
-                                      "Entity": "_Measures"
-                                    }
-                                  },
-                                  "Property": "Revenue FC Accuracy %"
-                                }
-                              },
-                              "Right": {
-                                "Literal": {
-                                  "Value": "0.6D"
-                                }
+                    "FillRule": {
+                      "Input": {
+                        "Measure": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Entity": "_Measures"
+                            }
+                          },
+                          "Property": "Revenue FC Accuracy %"
+                        }
+                      },
+                      "FillRule": {
+                        "linearGradient3": {
+                          "min": {
+                            "color": {
+                              "Literal": {
+                                "Value": "'#D99A2B'"
                               }
                             }
                           },
-                          "Value": {
-                            "Literal": {
-                              "Value": "'#C53D3D'"
-                            }
-                          }
-                        },
-                        {
-                          "Condition": {
-                            "And": {
-                              "Left": {
-                                "Comparison": {
-                                  "ComparisonKind": 2,
-                                  "Left": {
-                                    "Measure": {
-                                      "Expression": {
-                                        "SourceRef": {
-                                          "Entity": "_Measures"
-                                        }
-                                      },
-                                      "Property": "Revenue FC Accuracy %"
-                                    }
-                                  },
-                                  "Right": {
-                                    "Literal": {
-                                      "Value": "0.6D"
-                                    }
-                                  }
-                                }
-                              },
-                              "Right": {
-                                "Comparison": {
-                                  "ComparisonKind": 3,
-                                  "Left": {
-                                    "Measure": {
-                                      "Expression": {
-                                        "SourceRef": {
-                                          "Entity": "_Measures"
-                                        }
-                                      },
-                                      "Property": "Revenue FC Accuracy %"
-                                    }
-                                  },
-                                  "Right": {
-                                    "Literal": {
-                                      "Value": "0.8D"
-                                    }
-                                  }
-                                }
+                          "mid": {
+                            "color": {
+                              "Literal": {
+                                "Value": "'#accebd'"
                               }
                             }
                           },
-                          "Value": {
-                            "Literal": {
-                              "Value": "'#D99A2B'"
-                            }
-                          }
-                        },
-                        {
-                          "Condition": {
-                            "Comparison": {
-                              "ComparisonKind": 2,
-                              "Left": {
-                                "Measure": {
-                                  "Expression": {
-                                    "SourceRef": {
-                                      "Entity": "_Measures"
-                                    }
-                                  },
-                                  "Property": "Revenue FC Accuracy %"
-                                }
-                              },
-                              "Right": {
-                                "Literal": {
-                                  "Value": "0.6D"
-                                }
+                          "max": {
+                            "color": {
+                              "Literal": {
+                                "Value": "'#2F855A'"
                               }
                             }
                           },
-                          "Value": {
-                            "Literal": {
-                              "Value": "'#2F855A'"
+                          "nullColoringStrategy": {
+                            "strategy": {
+                              "Literal": {
+                                "Value": "'asZero'"
+                              }
                             }
                           }
                         }
-                      ]
+                      }
                     }
                   }
                 }
@@ -611,49 +546,6 @@
           }
         },
         "type": "Categorical",
-        "filter": {
-          "Version": 2,
-          "From": [
-            {
-              "Name": "d",
-              "Entity": "dimRegion",
-              "Type": 0
-            }
-          ],
-          "Where": [
-            {
-              "Condition": {
-                "Not": {
-                  "Expression": {
-                    "In": {
-                      "Expressions": [
-                        {
-                          "Column": {
-                            "Expression": {
-                              "SourceRef": {
-                                "Source": "d"
-                              }
-                            },
-                            "Property": "country"
-                          }
-                        }
-                      ],
-                      "Values": [
-                        [
-                          {
-                            "Literal": {
-                              "Value": "null"
-                            }
-                          }
-                        ]
-                      ]
-                    }
-                  }
-                }
-              }
-            }
-          ]
-        },
         "isHiddenInViewMode": true,
         "objects": {
           "general": [

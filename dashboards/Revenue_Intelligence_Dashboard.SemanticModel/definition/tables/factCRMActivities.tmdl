@@ -5,10 +5,10 @@ table factCRMActivities
 		dataType: int64
 		formatString: 0
 		lineageTag: 7f241083-8082-4e78-a4ca-eb437fadd32d
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: activity_id
 
-		annotation SummarizationSetBy = Automatic
+		annotation SummarizationSetBy = User
 
 	column date_id
 		dataType: int64
@@ -18,22 +18,6 @@ table factCRMActivities
 		sourceColumn: date_id
 
 		annotation SummarizationSetBy = Automatic
-
-	column activity_date
-		dataType: dateTime
-		formatString: Long Date
-		lineageTag: 1668e348-33c5-4586-a9b0-c7bdff192968
-		summarizeBy: none
-		sourceColumn: activity_date
-
-		variation Variation
-			isDefault
-			relationship: abca0232-2f73-4069-99c0-1f3ee8b670db
-			defaultHierarchy: LocalDateTable_2f05523b-c270-482f-a126-c2f6889296ad.'Date Hierarchy'
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation UnderlyingDateTimeDataType = Date
 
 	column customer_id
 		dataType: int64
@@ -102,8 +86,13 @@ table factCRMActivities
 		mode: import
 		source =
 				let
-				  Source = Sql.Database("localhost", "RevenueAnalytics"),
-				  #"Navigation 1" = Source{[Schema = "staging", Item = "factCRMActivities"]}[Data]
+				  Source = Sql.Database(pSqlServer, pSqlDatabase),
+				  #"Navigation 1" = Source{[Schema = "staging", Item = "factCRMActivities"]}[Data],
+				    #"Removed Columns" = Table.RemoveColumns(#"Navigation 1",{"activity_date"})
 				in
-				  #"Navigation 1"
+				  #"Removed Columns"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
 

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.12.0/schema.json",
   "name": "9ecc7e9c6d22490c6503",
   "position": {
     "x": 148.51419031719533,
@@ -36,22 +36,17 @@
           "projections": [
             {
               "field": {
-                "Aggregation": {
+                "Measure": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "factPipeline"
-                        }
-                      },
-                      "Property": "weighted_pipeline_eur"
+                    "SourceRef": {
+                      "Entity": "_Measures"
                     }
                   },
-                  "Function": 0
+                  "Property": "Weighted Pipeline Total"
                 }
               },
-              "queryRef": "Sum(factPipeline.weighted_pipeline_eur)",
-              "nativeQueryRef": "Sum of weighted_pipeline_eur"
+              "queryRef": "_Measures.Weighted Pipeline Total",
+              "nativeQueryRef": "Weighted Pipeline Total"
             }
           ]
         },
@@ -59,22 +54,17 @@
           "projections": [
             {
               "field": {
-                "Aggregation": {
+                "Measure": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "factCRMActivities"
-                        }
-                      },
-                      "Property": "activity_minutes"
+                    "SourceRef": {
+                      "Entity": "_Measures"
                     }
                   },
-                  "Function": 0
+                  "Property": "CRM Activity Minutes Total"
                 }
               },
-              "queryRef": "Sum(factCRMActivities.activity_minutes)",
-              "nativeQueryRef": "Sum of activity_minutes",
+              "queryRef": "_Measures.CRM Activity Minutes Total",
+              "nativeQueryRef": "CRM Activity Minutes Total",
               "active": true
             }
           ]
@@ -83,22 +73,17 @@
           "projections": [
             {
               "field": {
-                "Aggregation": {
+                "Measure": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "factPipeline"
-                        }
-                      },
-                      "Property": "win_probability"
+                    "SourceRef": {
+                      "Entity": "_Measures"
                     }
                   },
-                  "Function": 1
+                  "Property": "Average Win Probability"
                 }
               },
-              "queryRef": "Sum(factPipeline.win_probability)",
-              "nativeQueryRef": "Average of win_probability"
+              "queryRef": "_Measures.Average Win Probability",
+              "nativeQueryRef": "Average Win Probability"
             }
           ]
         }

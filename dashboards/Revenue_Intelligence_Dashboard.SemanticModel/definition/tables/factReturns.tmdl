@@ -28,22 +28,6 @@ table factReturns
 
 		annotation SummarizationSetBy = Automatic
 
-	column return_date
-		dataType: dateTime
-		formatString: Long Date
-		lineageTag: e09da95b-f6c6-42ae-83ef-92c99f7e45af
-		summarizeBy: none
-		sourceColumn: return_date
-
-		variation Variation
-			isDefault
-			relationship: 0b58ae17-0f89-4a6a-b3ec-8f506ac7a74b
-			defaultHierarchy: LocalDateTable_1e557013-246d-4834-b7a6-62359e6c5756.'Date Hierarchy'
-
-		annotation SummarizationSetBy = Automatic
-
-		annotation UnderlyingDateTimeDataType = Date
-
 	column customer_id
 		dataType: int64
 		formatString: 0
@@ -102,10 +86,11 @@ table factReturns
 		mode: import
 		source =
 				let
-				  Source = Sql.Database("localhost", "RevenueAnalytics"),
-				  #"Navigation 1" = Source{[Schema = "staging", Item = "factReturns"]}[Data]
+				  Source = Sql.Database(pSqlServer, pSqlDatabase),
+				  #"Navigation 1" = Source{[Schema = "staging", Item = "factReturns"]}[Data],
+				    #"Removed Columns" = Table.RemoveColumns(#"Navigation 1",{"return_date"})
 				in
-				  #"Navigation 1"
+				    #"Removed Columns"
 
 	annotation PBI_NavigationStepName = Navigation
 
